@@ -22,8 +22,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
-    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
     // https://mvnrepository.com/artifact/org.telegram/telegrambotsextensions
     implementation group: 'org.telegram', name: 'telegrambotsextensions', version: '6.4.0'
