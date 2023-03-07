@@ -29,12 +29,12 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     @Override
     public String getBotUsername() {
-        return BotConstants.BOT_NAME;
+        return BotConstants.getBotName();
     }
 
     @Override
     public String getBotToken() {
-        return BotConstants.BOT_TOKEN;
+        return BotConstants.getBotToken();
     }
 
     @Override
@@ -79,7 +79,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
         }
 
-//        System.out.println("Non-command here!");
     }
 
     @Override

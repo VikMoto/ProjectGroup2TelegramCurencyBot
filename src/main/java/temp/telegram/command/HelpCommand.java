@@ -20,4 +20,5 @@ public class HelpCommand extends BotCommand {
         helpMessage.setChatId(Long.toString(chat.getId()));
         absSender.execute(helpMessage);
     }
+
 }
