@@ -61,3 +61,6 @@ bin/
 /settings.gradle
 /gradlew.bat
 /gradlew
+
+##credentials
+/config/bot_credentials.txt
