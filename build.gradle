@@ -30,6 +30,10 @@ dependencies {
     implementation group: 'org.telegram', name: 'telegrambotsextensions', version: '6.4.0'
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 test {
     useJUnitPlatform()
 }
