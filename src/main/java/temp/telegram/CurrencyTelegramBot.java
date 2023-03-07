@@ -1,5 +1,9 @@
 package temp.telegram;
 
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import temp.currency.CurrencyService;
 import temp.currency.PrivatBankCurrencyService;
 import temp.currency.dto.Currency;
@@ -13,6 +17,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
@@ -53,34 +59,81 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     @Override
     public void processNonCommandUpdate(Update update) {
         if (update.hasCallbackQuery()) {
+
             String callbackQuery = update.getCallbackQuery().getData();
-            Currency currencyQuery = Currency.valueOf(callbackQuery);
-
-
-            String convertText = prettyPrintCurrencyServise.convert(
-                    currencyService.getRate(currencyQuery), currencyQuery);
-
-            SendMessage responseMessage = new SendMessage();
-            responseMessage.setText(convertText);
-            //
-            Long chatId = update.getCallbackQuery().getMessage().getChatId();
-            responseMessage.setChatId(Long.toString(chatId));
-            execute(responseMessage); //@SneakyThrows instead try/Catch block
             System.out.println("callbackQuery = " + callbackQuery);
-        }
-        if (update.hasMessage()){
-            String message = update.getMessage().getText();
-            String responseText = "You wrote - " + message;
 
-            SendMessage messageText = new SendMessage();
-            messageText.setText(responseText);
-            messageText.setChatId(Long.toString(update.getMessage().getChatId()));
-            execute(messageText);//@SneakyThrows instead try/Catch block
+            CallbackQuery query = update.getCallbackQuery();
+            String callbackData = query.getData();
+            Long chatId = query.getMessage().getChatId();
+            Integer messageId = query.getMessage().getMessageId();
+
+            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+
+            answerCallbackQuery.setCallbackQueryId(query.getId());
+            switch (callbackData) {
+                case "get notification":
+                    //todo another sendOptionsMessage2()
+//                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+                    answerCallbackQuery.setText("You chose Отримати інфо");
+                    break;
+                case "settings":
+                    sendOptionsMessage(chatId, messageId, "Налаштування:");
+                    answerCallbackQuery.setText("You chose налаштування");
+                    break;
+            }
+            try {
+                execute(answerCallbackQuery);
+            } catch (Exception e) {
+                // Handle exception
+            }
 
         }
 
     }
 
+    private void sendOptionsMessage(Long chatId, Integer messageId, String text) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(text);
+
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+
+        InlineKeyboardButton button1 = InlineKeyboardButton.builder()
+                .text("Price precision")
+                .callbackData("price precision")
+                .build();
+        InlineKeyboardButton button2 = InlineKeyboardButton.builder()
+                .text("Bank")
+                .callbackData("bank")
+                .build();
+        InlineKeyboardButton button3 = InlineKeyboardButton.builder()
+                .text("Currencies")
+                .callbackData("currencies")
+                .build();
+        InlineKeyboardButton button4 = InlineKeyboardButton.builder()
+                .text("Time notification")
+                .callbackData("time notification")
+                .build();
+
+        keyboard.add(Arrays.asList(button1));
+        keyboard.add(Arrays.asList(button2));
+        keyboard.add(Arrays.asList(button3));
+        keyboard.add(Arrays.asList(button4));
+
+        final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
+                .builder()
+                .keyboard(keyboard)
+                .build();
+
+        message.setReplyMarkup(keyboardMarkup);
+        message.setReplyToMessageId(messageId);
+        try {
+            execute(message);
+        } catch (Exception e) {
+            // Handle exception
+        }
+    }
     @Override
     public void processInvalidCommandUpdate(Update update) {
         super.processInvalidCommandUpdate(update);
