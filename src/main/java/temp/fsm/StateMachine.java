@@ -1,10 +1,5 @@
 package temp.fsm;
 
-import temp.currency.SettingsVariables;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class StateMachine {
 
     public void handle(String text) {
