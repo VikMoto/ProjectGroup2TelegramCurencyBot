@@ -6,10 +6,11 @@ import com.google.gson.reflect.TypeToken;
 import org.jsoup.Jsoup;
 import temp.currency.CurrencyService;
 import temp.currency.dto.Currency;
-import temp.currency.dto.CurrencyItem;
+import temp.currency.dto.CurrencyRateResponsePrivat;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 public class PrivatBankCurrencyService implements CurrencyService {
 
     @Override
-    public HashMap<String, Double> getRate(Currency currency) {
+    public HashMap<String, BigDecimal> getRate(Currency currency) {
         final String privatURL = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
         final String privatResponse;
         try {
@@ -33,25 +34,26 @@ public class PrivatBankCurrencyService implements CurrencyService {
             throw new IllegalStateException("Can`t to connect Privat API");
         }
 
-        Type collectionType = new TypeToken<List<CurrencyItem>>() {
+        Type collectionType = new TypeToken<List<CurrencyRateResponsePrivat>>() {
         }.getType();
-        List<CurrencyItem> currencyItemPrivats = new Gson().fromJson(privatResponse, collectionType);
+        List<CurrencyRateResponsePrivat> currencyItemPrivats = new Gson().fromJson(privatResponse, collectionType);
 
-        double privatBuy = getCurrency(CurrencyItem::getBuy, currencyItemPrivats, currency);
-        double privatSell = getCurrency(CurrencyItem::getSale, currencyItemPrivats, currency);
+        BigDecimal privatBuy = getCurrency(CurrencyRateResponsePrivat::getBuy, currencyItemPrivats, currency);
+        BigDecimal privatSell = getCurrency(CurrencyRateResponsePrivat::getSale, currencyItemPrivats, currency);
 
-        HashMap<String, Double> privatRate = new HashMap<>();
+        HashMap<String, BigDecimal> privatRate = new HashMap<>();
         privatRate.put("buy" + currency, privatBuy);
         privatRate.put("sell" + currency, privatSell);
 
         return privatRate;
     }
 
-    private static double getCurrency(Function<CurrencyItem, Float> function, List<CurrencyItem> currencyItemPrivats,
+    private static BigDecimal getCurrency(Function<CurrencyRateResponsePrivat, BigDecimal> function, List<CurrencyRateResponsePrivat> currencyItemPrivats,
                                       Currency currency) {
-        return currencyItemPrivats.stream()
+        final BigDecimal bigDecimal = currencyItemPrivats.stream()
                 .filter(it -> it.getCcy() == currency)
                 .map(function)
                 .collect(Collectors.toList()).get(0);
+        return bigDecimal;
     }
 }

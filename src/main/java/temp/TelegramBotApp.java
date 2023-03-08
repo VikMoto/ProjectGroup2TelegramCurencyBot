@@ -6,6 +6,7 @@ import temp.currency.dto.Currency;
 import temp.telegram.TelegramBotService;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class TelegramBotApp {
@@ -15,7 +16,7 @@ public class TelegramBotApp {
 
         CurrencyService currencyService = new PrivatBankCurrencyService();
         Currency currency = Currency.USD;
-        Map<String, Double> rate = currencyService.getRate(currency);
+        Map<String, BigDecimal> rate = currencyService.getRate(currency);
        // String convert = new PrettyPrintCurrencyServise().convert(rate, currency, 3);
 
         System.out.println(rate);
