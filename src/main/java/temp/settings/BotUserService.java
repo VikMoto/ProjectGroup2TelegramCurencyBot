@@ -2,11 +2,9 @@ package temp.settings;
 
 import temp.Api.MonoCurrencyService;
 import temp.Api.NBUCurrencyService;
-import temp.Api.PrivateBankCurrencyService;
+import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Bank;
-import temp.currency.dto.Currency;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 public class BotUserService {
@@ -14,7 +12,7 @@ public class BotUserService {
     private StorageOfUsers userStorage;
 
     NBUCurrencyService nbuCurrencyService = new NBUCurrencyService();
-    PrivateBankCurrencyService privateBankCurrencyService = new PrivateBankCurrencyService();
+    PrivatBankCurrencyService privatBankCurrencyService = new PrivatBankCurrencyService();
     MonoCurrencyService monoCurrencyService = new MonoCurrencyService();
 
     public BotUserService() {

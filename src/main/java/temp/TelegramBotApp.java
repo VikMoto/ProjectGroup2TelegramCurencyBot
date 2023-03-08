@@ -1,12 +1,12 @@
 package temp;
 
 import temp.currency.CurrencyService;
-import temp.currency.PrivatBankCurrencyService;
+import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Currency;
 import temp.telegram.TelegramBotService;
-import temp.ui.PrettyPrintCurrencyServise;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class TelegramBotApp {
     public static void main(String[] args) throws IOException {
@@ -15,9 +15,9 @@ public class TelegramBotApp {
 
         CurrencyService currencyService = new PrivatBankCurrencyService();
         Currency currency = Currency.USD;
-        double[] rate = currencyService.getRate(currency);
-        String convert = new PrettyPrintCurrencyServise().convert(rate, currency);
+        Map<String, Double> rate = currencyService.getRate(currency);
+       // String convert = new PrettyPrintCurrencyServise().convert(rate, currency, 3);
 
-        System.out.println(convert);
+        System.out.println(rate);
     }
 }

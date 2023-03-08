@@ -2,16 +2,18 @@ package temp.ui;
 
 import temp.currency.dto.Currency;
 
-public class  PrettyPrintCurrencyServise {
-    public String convert(double[] rate , Currency currency) {
+import java.util.HashMap;
+
+public class PrettyPrintCurrencyServise {
+    public String convert(HashMap<String, Double> rate, Currency currency, int precision) {
         String template = "Exchange Rate \n UAH => 1 {currency}: buy {buy} - sell {sell}";
 
-        float roundedRateBuy = Math.round(rate[0] * 100d)/100f;
-        float roundedRateSell = Math.round(rate[1] * 100d)/100f;
+        double buyRate = rate.get("buyUSD");
+        double sellRate = rate.get("sellUSD");
 
         return template
                 .replace("{currency}", currency.name())
-                .replace("{buy}", roundedRateBuy + "")
-                .replace("{sell}", roundedRateSell + "");
+                .replace("{buy}", String.format("%." + precision + "f", buyRate) + "")
+                .replace("{sell}", String.format("%." + precision + "f", sellRate) + "");
     }
 }
