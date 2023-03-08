@@ -60,8 +60,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     public void processNonCommandUpdate(Update update) {
         if (update.hasCallbackQuery()) {
 
-            String callbackQuery = update.getCallbackQuery().getData();
-            System.out.println("callbackQuery = " + callbackQuery);
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            System.out.println("callbackQuery = " + callbackQuery.getData());
 
             CallbackQuery query = update.getCallbackQuery();
             String callbackData = query.getData();
@@ -71,17 +71,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
 
             answerCallbackQuery.setCallbackQueryId(query.getId());
-            switch (callbackData) {
-                case "get notification":
-                    //todo another sendOptionsMessage2()
-//                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
-                    answerCallbackQuery.setText("You chose Отримати інфо");
-                    break;
-                case "settings":
-                    sendOptionsMessage(chatId, messageId, "Налаштування:");
-                    answerCallbackQuery.setText("You chose налаштування");
-                    break;
-            }
+            handle(callbackQuery, callbackData, chatId, messageId, answerCallbackQuery);
+
+
             try {
                 execute(answerCallbackQuery);
             } catch (Exception e) {
@@ -90,6 +82,43 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
         }
 
+    }
+
+    private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) {
+        switch (callbackData) {
+            case "get notification":
+                //todo another sendOptionsMessage2()
+//                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+                answerCallbackQuery.setText("You chose Отримати інфо");
+                break;
+            case "settings":
+                sendOptionsMessage(chatId, messageId, "Налаштування:");
+                answerCallbackQuery.setText("You chose налаштування");
+                break;
+            case "price precision":
+                sendOptionsMessage(chatId, messageId, "Налаштування:");
+                answerCallbackQuery.setText("You chose налаштування");
+                break;
+            case "bank":
+                //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+                answerCallbackQuery.setText("You chose Отримати інфо");
+                break;
+            case "currencies":
+                //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+                answerCallbackQuery.setText("You chose Отримати інфо");
+                break;
+            case "time notification":
+                //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+                answerCallbackQuery.setText("You chose Отримати інфо");
+                break;
+            case "start":
+                // If callback data is "start", send the start message again
+                StartCommand startCommand = new StartCommand();
+                startCommand.execute(this, callbackQuery.getFrom(), callbackQuery.getMessage().getChat(), null);
+                break;
+
+
+        }
     }
 
     private void sendOptionsMessage(Long chatId, Integer messageId, String text) {
@@ -115,11 +144,16 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 .text("Time notification")
                 .callbackData("time notification")
                 .build();
+        InlineKeyboardButton button5 = InlineKeyboardButton.builder()
+                .text("Return main manu")
+                .callbackData("start")
+                .build();
 
         keyboard.add(Arrays.asList(button1));
         keyboard.add(Arrays.asList(button2));
         keyboard.add(Arrays.asList(button3));
         keyboard.add(Arrays.asList(button4));
+        keyboard.add(Arrays.asList(button5));
 
         final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
                 .builder()
