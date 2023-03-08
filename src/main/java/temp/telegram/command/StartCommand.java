@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,64 +24,41 @@ public class StartCommand extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-       String text = "What currency Exchange Rate do You want to know:";
+        String text = "What currency Exchange Rate do You want to know:";
+        Long chatId = chat.getId();
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(text);
         sendMessage.setChatId(Long.toString(chat.getId()));
-        //take from enum Currency USD and EUR and convert to buttons Array
-        final List<InlineKeyboardButton> buttons = Arrays.asList(Currency.USD, Currency.EUR)
-                .stream()
-                .map(it -> it.name())
-                .map(it -> InlineKeyboardButton
-                        .builder()
-                        .text(it)
-                        .callbackData(it)
-                        .build())
-                .collect(Collectors.toList());
+//        SendMessage message = new SendMessage(String.valueOf(chatId), "Please choose a value:");
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+
+        InlineKeyboardButton button1 = InlineKeyboardButton.builder()
+                .text("Get notification")
+                .callbackData("get notification")
+                .build();
+
+        InlineKeyboardButton button2 = InlineKeyboardButton.builder()
+                .text("Settings")
+                .callbackData("settings")
+                .build();
+
+        keyboard.add(Arrays.asList(button1));
+        keyboard.add(Arrays.asList(button2));
+
+
+
+
         /** create keyboard from List */
         final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
                 .builder()
-                .keyboard(Collections.singleton(buttons))
+                .keyboard(keyboard)
                 .build();
-
+//        markup.setKeyboard(keyboard);
         sendMessage.setReplyMarkup(keyboardMarkup);
-
-        //create button
-//        final InlineKeyboardButton usdButton = InlineKeyboardButton
-//                .builder()
-//                .text("USD")
-//                .callbackData("USD")
-//                .build();
-//
-//        KeyboardButton usdButton = KeyboardButton.builder().text("USD").build();
-//        //create keyboard ONE BUTTON
-//        final InlineKeyboardMarkup keyboard = InlineKeyboardMarkup
-//                .builder()
-//                //keyboard this is List of Lists
-//                .keyboard(Collections.singleton( //one List
-//                        Collections.singletonList(usdButton) //Put to inside another List
-//                ))
-//                .build();
-//        sendMessage.setReplyMarkup(keyboard);
-
-
-
-
-//        KeyboardRow keyboardRow = new KeyboardRow();
-//        keyboardRow.add(usdButton);
-////create keyboard and sout to bot
-//        ReplyKeyboardMarkup keyboard = ReplyKeyboardMarkup
-//                .builder()
-//                .keyboardRow(keyboardRow)
-//                .build();
-//        sendMessage.setReplyMarkup(keyboard);
-
         try {
             absSender.execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            // Handle exception
         }
-
-        System.out.println("Start pressed!");
     }
 }
