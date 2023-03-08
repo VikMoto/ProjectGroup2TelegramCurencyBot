@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import temp.currency.CurrencyService;
-import temp.currency.PrivatBankCurrencyService;
+import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Currency;
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
@@ -17,9 +17,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
@@ -47,8 +46,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     public void onRegister() {
         super.onRegister();
     }
-
-
 
     @Override
     public void onUpdatesReceived(List<Update> updates) {
@@ -85,12 +82,15 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     }
 
-    private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) {
+    private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) throws IOException {
         switch (callbackData) {
-            case "get notification":
-                //todo another sendOptionsMessage2()
-//                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
-                answerCallbackQuery.setText("You chose get notification");
+            case "getInformation":
+                //static service in code for now
+                int presicion = 3;
+                CurrencyService currencyService = new PrivatBankCurrencyService();
+                Currency currency = Currency.USD;
+                String formatedRate = new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency), currency, presicion);
+                answerCallbackQuery.setText(formatedRate);
                 break;
             case "settings":
                 sendOptionsMessage(chatId, messageId, "settings");

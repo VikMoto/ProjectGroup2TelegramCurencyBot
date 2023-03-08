@@ -1,10 +1,9 @@
 package temp.currency;
 
-
 import temp.currency.dto.Currency;
-
 import java.io.IOException;
+import java.util.HashMap;
 
 public interface CurrencyService {
-    double[] getRate(Currency currency) throws IOException;
-    }
+    HashMap<String, Double> getRate(Currency currency) throws IOException;
+}
