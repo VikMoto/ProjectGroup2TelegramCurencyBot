@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.jsoup.Jsoup;
-import temp.currency.CurrencyService;
 import temp.currency.dto.Currency;
 import temp.currency.dto.CurrencyRateResponsePrivat;
 
