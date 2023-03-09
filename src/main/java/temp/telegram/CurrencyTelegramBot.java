@@ -97,11 +97,12 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             case "getInformation":
                 //static service in code for now
 
-                service.setPrecision(chatId, 4);
-                service.setBank(chatId, Bank.PrivatBank);
-                service.setCurrencies(chatId, Currency.EUR);
+                service.setPrecision(chatId, 3);
+                service.setBank(chatId, Bank.NBU);
+                service.setCurrencies(chatId, Currency.USD);
                 Currency currency = service.getCurrency(chatId);
                 System.out.println("currency = " + currency);
+
                 String serviceInfo = service.getInfo(chatId);
 
 //                CurrencyService currencyService = new PrivatBankCurrencyService();

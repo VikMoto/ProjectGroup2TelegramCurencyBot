@@ -1,9 +1,9 @@
 package temp.settings;
 
+import temp.Api.CurrencyService;
 import temp.Api.MonoCurrencyService;
 import temp.Api.NBUCurrencyService;
 import temp.Api.PrivatBankCurrencyService;
-import temp.currency.CurrencyService;
 import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
 import temp.ui.PrettyPrintCurrencyServise;
@@ -99,6 +99,7 @@ public class BotUserService {
     public String getInfo(long userId) throws IOException {
         Bank bank = getBank(userId);
 //        Bank bank = Bank.PrivatBank;
+        System.out.println("bank = " + bank.name());
 
         int precision = getPrecision(userId);
         Currency currency = getCurrency(userId);
@@ -107,13 +108,14 @@ public class BotUserService {
         String currencyPairEur = "UAH/EUR";
 
         if (bank == Bank.NBU) {
-
+            CurrencyService currencyService = new NBUCurrencyService();
+            result = bank.name() + "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency),currency, getPrecision(userId));
 
         }
 
         if (bank == Bank.MonoBank) {
-
-
+            CurrencyService currencyService = new MonoCurrencyService();
+            result = bank.name() + "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency),currency, getPrecision(userId));
         }
 
         if (bank == Bank.PrivatBank) {
