@@ -47,7 +47,6 @@ public class MonoCurrencyService implements CurrencyService {
         HashMap<String, BigDecimal> monoRate = new HashMap<>();
         monoRate.put("buy" + currency, monoBuy);
         monoRate.put("sell" + currency, monoSell);
-
         return monoRate;
     }
 
@@ -55,20 +54,9 @@ public class MonoCurrencyService implements CurrencyService {
                                           Currency currency) {
 
         final BigDecimal bigDecimal = currencyItemMonos.stream()
-                .filter(it -> it.getCurrencyCodeA() == convertMonoCurrencyCodeToEnum(currency))
+                .filter(it -> it.getCurrencyCodeA() == currency)
                 .map(function)
                 .collect(Collectors.toList()).get(0);
         return bigDecimal;
-    }
-
-    private static int convertMonoCurrencyCodeToEnum(Currency currency){
-        if(currency == Currency.EUR){
-            return 978;
-        }else if(currency == Currency.UAH){
-            return 980;
-        }else if(currency == Currency.USD){
-            return 840;
-        }
-        return -1;
     }
 }

@@ -48,7 +48,7 @@ public class PrivatBankCurrencyService implements CurrencyService {
     }
 
     private static BigDecimal getCurrency(Function<CurrencyRateResponsePrivat, BigDecimal> function, List<CurrencyRateResponsePrivat> currencyItemPrivats,
-                                      Currency currency) {
+                                          Currency currency) {
         final BigDecimal bigDecimal = currencyItemPrivats.stream()
                 .filter(it -> it.getCcy() == currency)
                 .map(function)

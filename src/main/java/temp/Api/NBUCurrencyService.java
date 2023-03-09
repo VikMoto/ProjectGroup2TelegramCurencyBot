@@ -50,5 +50,4 @@ public class NBUCurrencyService implements CurrencyService {
                 .map(function)
                 .collect(Collectors.toList()).get(0);
     }
-
 }
