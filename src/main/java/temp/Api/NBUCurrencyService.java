@@ -3,7 +3,6 @@ package temp.Api;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.jsoup.Jsoup;
-import temp.currency.CurrencyService;
 import temp.currency.dto.Currency;
 import temp.currency.dto.CurrencyRateResponseNBU;
 
@@ -13,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
-
+import java.util.stream.Collectors;
 
 public class NBUCurrencyService implements CurrencyService {
 
@@ -35,7 +34,7 @@ public class NBUCurrencyService implements CurrencyService {
         List<CurrencyRateResponseNBU> currencyItemNBUs = new Gson().fromJson(NBU_RESPONSE, collectionType);
 
         BigDecimal buy = getCurrency(CurrencyRateResponseNBU::getRate, currencyItemNBUs, currency);
-        BigDecimal sell = buy.multiply(BigDecimal.valueOf(0.95));
+        BigDecimal sell = buy;
 
         HashMap<String, BigDecimal> nbuRate = new HashMap<>();
         nbuRate.put("buy" + currency, buy);
@@ -49,8 +48,6 @@ public class NBUCurrencyService implements CurrencyService {
         return currencyItemNBUs.stream()
                 .filter(it -> it.getCc() == currency)
                 .map(function)
-                .toList()
-                .get(0);
+                .collect(Collectors.toList()).get(0);
     }
-
 }

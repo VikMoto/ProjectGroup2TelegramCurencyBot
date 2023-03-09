@@ -5,7 +5,8 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import temp.currency.CurrencyService;
+import temp.Api.CurrencyService;
+
 import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;

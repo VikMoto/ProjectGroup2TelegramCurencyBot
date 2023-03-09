@@ -1,4 +1,4 @@
-package temp.currency;
+package temp.Api;
 
 import temp.currency.dto.Currency;
 import java.io.IOException;

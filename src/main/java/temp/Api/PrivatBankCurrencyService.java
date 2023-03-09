@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.jsoup.Jsoup;
-import temp.currency.CurrencyService;
 import temp.currency.dto.Currency;
 import temp.currency.dto.CurrencyRateResponsePrivat;
 
@@ -49,7 +48,7 @@ public class PrivatBankCurrencyService implements CurrencyService {
     }
 
     private static BigDecimal getCurrency(Function<CurrencyRateResponsePrivat, BigDecimal> function, List<CurrencyRateResponsePrivat> currencyItemPrivats,
-                                      Currency currency) {
+                                          Currency currency) {
         final BigDecimal bigDecimal = currencyItemPrivats.stream()
                 .filter(it -> it.getCcy() == currency)
                 .map(function)
