@@ -7,7 +7,7 @@ public enum Currency {
     CHF,
     GBP,
     JPY,
-    PLZ,
+    PLN,
     CZK,
     ILS,
     NOK,
