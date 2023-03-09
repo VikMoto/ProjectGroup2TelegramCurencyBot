@@ -7,10 +7,10 @@ import java.util.HashMap;
 
 public class PrettyPrintCurrencyServise {
     public String convert(HashMap<String, BigDecimal> rate, Currency currency, int precision) {
-        String template = "Exchange Rate \n UAH => 1 {currency}: buy {buy} - sell {sell}";
+        String template = "Exchange Rate \n UAH / {currency}: buy {buy} - sell {sell}";
 
-        BigDecimal buyRate = rate.get("buyUSD");
-        BigDecimal sellRate = rate.get("sellUSD");
+        BigDecimal buyRate = rate.get("buy" + currency);
+        BigDecimal sellRate = rate.get("sell" + currency);
 
         return template
                 .replace("{currency}", currency.name())

@@ -4,9 +4,13 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import temp.Api.CurrencyService;
+
 import temp.Api.PrivatBankCurrencyService;
+import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
+import temp.settings.BotUserService;
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
 import temp.ui.PrettyPrintCurrencyServise;
@@ -82,17 +86,38 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     }
 
-    private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) throws IOException {
+
+
+    private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) throws IOException, TelegramApiException {
+
+        BotUserService service = BotUserService.getInstance();
+
+
         switch (callbackData) {
             case "getInformation":
                 //static service in code for now
-                SendMessage message = new SendMessage();
-                int presicion = 3;
-                CurrencyService currencyService = new PrivatBankCurrencyService();
-                Currency currency = Currency.USD;
-                String formatedRate = new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency), currency, presicion);
-                message.setText(formatedRate);
-                answerCallbackQuery.setText(formatedRate);
+
+                service.setPrecision(chatId, 4);
+                service.setBank(chatId, Bank.PrivatBank);
+                service.setCurrencies(chatId, Currency.EUR);
+                Currency currency = service.getCurrency(chatId);
+                System.out.println("currency = " + currency);
+                String serviceInfo = service.getInfo(chatId);
+
+//                CurrencyService currencyService = new PrivatBankCurrencyService();
+//                Currency currency = Currency.USD;
+//                String formatedRate = new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency), currency, service.getPrecision(chatId));
+//                System.out.println("serviceInfo = " + serviceInfo);
+//                answerCallbackQuery.setText("serviceInfo = " + serviceInfo);
+////                answerCallbackQuery.setText("formatedRate = " + formatedRate);
+
+
+
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.setText(serviceInfo);
+                sendMessage.setChatId(Long.toString(chatId));
+                execute(sendMessage);
+
                 break;
             case "settings":
                 sendOptionsMessage(chatId, messageId, "settings");
@@ -106,9 +131,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
                 answerCallbackQuery.setText("You chose bank");
                 break;
-            case "currencies":
+            case "currency":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
-                answerCallbackQuery.setText("You chose currencies");
+                answerCallbackQuery.setText("You chose currency");
                 break;
             case "time notification":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
@@ -122,6 +147,42 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
 
         }
+    }
+
+    public SendMessage getMessage(Long chatId) throws IOException {
+        BotUserService botUserService = BotUserService.getInstance();
+
+
+        String helloText = botUserService.getInfo(chatId);
+        SendMessage message = new SendMessage();//same code
+        message.setText(helloText);
+        message.setChatId(Long.toString(chatId));
+
+        InlineKeyboardButton getInfo = InlineKeyboardButton
+                .builder()
+                .text("Get info \uD83D\uDCB1")
+                .callbackData("getInfo")
+                .build();
+
+        InlineKeyboardButton settings = InlineKeyboardButton
+                .builder()
+                .text("Settings \ud83d\udd27")
+                .callbackData("settings")
+                .build();
+
+        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList();
+        keyboardButtonsRow1.add(getInfo);
+        List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList();
+        keyboardButtonsRow2.add(settings);
+
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList();
+        keyboard.add(keyboardButtonsRow1);
+        keyboard.add(keyboardButtonsRow2);
+
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        markup.setKeyboard(keyboard);
+        message.setReplyMarkup(markup);
+        return message;
     }
 
     private void sendOptionsMessage(Long chatId, Integer messageId, String text) {

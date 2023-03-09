@@ -3,17 +3,21 @@ package temp.settings;
 import temp.Api.MonoCurrencyService;
 import temp.Api.NBUCurrencyService;
 import temp.Api.PrivatBankCurrencyService;
+import temp.currency.CurrencyService;
 import temp.currency.dto.Bank;
+import temp.currency.dto.Currency;
+import temp.ui.PrettyPrintCurrencyServise;
 
+import java.io.IOException;
 import java.util.List;
 
 public class BotUserService {
     private static volatile BotUserService instance;
     private StorageOfUsers userStorage;
 
-    NBUCurrencyService nbuCurrencyService = new NBUCurrencyService();
-    PrivatBankCurrencyService privatBankCurrencyService = new PrivatBankCurrencyService();
-    MonoCurrencyService monoCurrencyService = new MonoCurrencyService();
+    protected NBUCurrencyService nbuCurrencyService = new NBUCurrencyService();
+    protected PrivatBankCurrencyService privatBankCurrencyService = new PrivatBankCurrencyService();
+    protected MonoCurrencyService monoCurrencyService = new MonoCurrencyService();
 
     public BotUserService() {
         userStorage = StorageOfUsers.getInstance();
@@ -36,40 +40,35 @@ public class BotUserService {
         userStorage.add(new BotUser(userId));
     }
 
-    public void setBank(long userId, String bank) {
-        userStorage.get(userId).setBank(Bank.valueOf(bank));
+    public void setBank(long userId, Bank bank) {
+        userStorage.get(userId).setBank(bank);
     }
 
     public Bank getBank(long userId) {
         return userStorage.get(userId).getBank();
     }
 
-    public void setRounding(long userId, int rounding) {
-        userStorage.get(userId).setRounding(rounding);
+    public void setPrecision(long userId, int precision) {
+        userStorage.get(userId).setPrecision(precision);
+    }
+    public void setCurrencies(long userId, Currency currency) {
+        userStorage.get(userId).setCurrency(currency);
+    }
+    public Currency getCurrency(long userId) {
+       return userStorage.get(userId).getCurrency();
     }
 
-    public void setUsd(long userId, boolean usd) {
-        userStorage.get(userId).setUsd(usd);
+
+
+
+
+
+
+
+
+    public int getPrecision(long userId) {
+        return userStorage.get(userId).getPrecision();
     }
-
-    public void setEur(long userId, boolean eur) {
-        userStorage.get(userId).setEur(eur);
-    }
-
-
-
-    public int getRounding(long userId) {
-        return userStorage.get(userId).getRounding();
-    }
-
-    public boolean getUsd(long userId) {
-        return userStorage.get(userId).isUsd();
-    }
-
-    public boolean getEur(long userId) {
-        return userStorage.get(userId).isEur();
-    }
-
 
 
     public boolean getScheduler(long userId) {
@@ -90,97 +89,37 @@ public class BotUserService {
 
 
 
-    public String getCurrency(long userId) {
-        if (getUsd(userId)) {
-            return "usd";
-        } else  {
-            return "eur";
-        }
-    }
+
 
     public List<Long> getUsersWithNotificationOnCurrentHour(int time) {
         return userStorage.getUsersWithNotficationOnCurrentHour(time);
     }
 
 
-    public String getInfo(long userId) {
+    public String getInfo(long userId) throws IOException {
         Bank bank = getBank(userId);
-        boolean usd = getUsd(userId);
-        boolean eur = getEur(userId);
+//        Bank bank = Bank.PrivatBank;
 
-        int rounding = getRounding(userId);
+        int precision = getPrecision(userId);
+        Currency currency = getCurrency(userId);
         String result = "";
         String currencyPairUsd = "UAH/USD";
         String currencyPairEur = "UAH/EUR";
 
         if (bank == Bank.NBU) {
 
-//            if (getUsd(userId)) {
-//                double purchaseRate1 = nbuCurrencyService.getRate(Currency.USD).get("rateUSD");
-//                double purchaseRate = Precision.round(purchaseRate1, rounding);
-//                result = MessageFormat
-//                        .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: ⏳ ", "NBU", currencyPairUsd, String.format("%." + rounding + "f", purchaseRate));
-//
-//            }
-//            if (getEur(userId)) {
-//                double purchaseRate1 = nbuCurrencyService.getRate(Currency.EUR).get("rateEUR");
-//                double purchaseRate = Precision.round(purchaseRate1, rounding);
-//                result = MessageFormat
-//                        .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: ⏳ ", "NBU", currencyPairEur, String.format("%." + rounding + "f", purchaseRate));
-//
-//            }
 
         }
 
         if (bank == Bank.MonoBank) {
-            if (getUsd(userId)) {
-//                double purchaseRate = monoCurrencyService.getRate(Currency.USD).get("buyUSD");
-//                double saleRate = monoCurrencyService.getRate(Currency.USD).get("SellUSD");
-//                if (saleRate == 0) {
-//                    result = MessageFormat
-//                            .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: ⏳ ", "Monobank", currencyPairUsd, String.format("%." + rounding + "f", purchaseRate));
-//                } else {
-//                    result = MessageFormat
-//                            .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: {3}", "Monobank", currencyPairUsd, String.format("%." + rounding + "f", purchaseRate), String.format("%." + rounding + "f", saleRate));
-//                }
-            }
-            if (getEur(userId)) {
-//                double purchaseRate = monoCurrencyService.getRate(Currency.EUR).get("buyEUR");
-//                double saleRate = monoCurrencyService.getRate(Currency.EUR).get("SellEUR");
-//
-//                if (saleRate == 0) {
-//                    result = MessageFormat
-//                            .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: ⏳ ", "Monobank", currencyPairEur, String.format("%." + rounding + "f", purchaseRate));
-//                } else {
-//                    result = MessageFormat
-//                            .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: {3}", "Monobank", currencyPairEur, String.format("%." + rounding + "f", purchaseRate), String.format("%." + rounding + "f", saleRate));
-//                }
-            }
+
+
         }
 
         if (bank == Bank.PrivatBank) {
-            if (getUsd(userId)) {
-//                double purchaseRate = privateBankCurrencyService.getRate(Currency.USD).get("buyUSD");
-//                double saleRate = privateBankCurrencyService.getRate(Currency.USD).get("sellUSD");
-//                if (saleRate == 0) {
-//                    result = MessageFormat
-//                            .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: ⏳ ", "Private", currencyPairUsd, String.format("%." + rounding + "f", purchaseRate));
-//                } else {
-//                    result = MessageFormat
-//                            .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: {3}", "Private", currencyPairUsd, String.format("%." + rounding + "f", purchaseRate), String.format("%." + rounding + "f", saleRate));
-//                }
-            }
-            if (getEur(userId)) {
-//                double purchaseRate = privateBankCurrencyService.getRate(Currency.EUR).get("sellEUR");
-//                double saleRate = privateBankCurrencyService.getRate(Currency.EUR).get("buyEUR");
-//                if (saleRate == 0) {
-//                    result = MessageFormat
-//                            .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: ⏳ ", "Privat", currencyPairEur, String.format("%." + rounding + "f", saleRate));
-//                } else {
-//                    result = MessageFormat
-//                            .format("{0} exchange rate: {1}\n Purchase: {2}\n Sale: {3}", "Privat", currencyPairEur, String.format("%." + rounding + "f", saleRate), String.format("%." + rounding + "f", purchaseRate));
-//                }
-            }
+
+                  CurrencyService currencyService = new PrivatBankCurrencyService();
+                  result = bank.name() + "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency),currency, getPrecision(userId));
 
         }
 //        log.info(result);
