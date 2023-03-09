@@ -3,7 +3,6 @@ package temp.currency;
 import lombok.Data;
 import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
-import temp.currency.dto.CurrencyItem;
 
 import java.time.LocalDateTime;
 import java.util.List;

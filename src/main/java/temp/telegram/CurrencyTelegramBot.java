@@ -4,7 +4,7 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import temp.currency.CurrencyService;
+import temp.Api.CurrencyService;
 import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Currency;
 import temp.telegram.command.HelpCommand;
@@ -86,10 +86,12 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         switch (callbackData) {
             case "getInformation":
                 //static service in code for now
+                SendMessage message = new SendMessage();
                 int presicion = 3;
                 CurrencyService currencyService = new PrivatBankCurrencyService();
                 Currency currency = Currency.USD;
                 String formatedRate = new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency), currency, presicion);
+                message.setText(formatedRate);
                 answerCallbackQuery.setText(formatedRate);
                 break;
             case "settings":
