@@ -6,14 +6,13 @@ import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class BotUser {
     private final long id;
     private Bank bank;
     @Getter
-    private List<Currency> currencies;
+    private Currency currency;
     private int precision;
     private boolean scheduler;
     private int schedulerTime;
@@ -32,7 +31,7 @@ public class BotUser {
     public BotUser(long id) {
         this.id = id;
         bank = Bank.NBU;
-        currencies = new ArrayList<>();
+        currency = Currency.USD;
         precision = 2;
         scheduler = true;
         schedulerTime = 9;

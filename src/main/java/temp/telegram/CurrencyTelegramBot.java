@@ -96,11 +96,11 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             case "getInformation":
                 //static service in code for now
 
-                service.setPrecision(chatId, 3);
+                service.setPrecision(chatId, 4);
                 service.setBank(chatId, Bank.PrivatBank);
-                service.setCurrencies(chatId, List.of(Currency.USD, Currency.EUR));
-                final List<Currency> currencies = service.getCurrencies(chatId);
-                System.out.println("currencies = " + currencies);
+                service.setCurrencies(chatId, Currency.EUR);
+                Currency currency = service.getCurrency(chatId);
+                System.out.println("currency = " + currency);
                 String serviceInfo = service.getInfo(chatId);
 
 //                CurrencyService currencyService = new PrivatBankCurrencyService();
@@ -130,9 +130,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
                 answerCallbackQuery.setText("You chose bank");
                 break;
-            case "currencies":
+            case "currency":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
-                answerCallbackQuery.setText("You chose currencies");
+                answerCallbackQuery.setText("You chose currency");
                 break;
             case "time notification":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
