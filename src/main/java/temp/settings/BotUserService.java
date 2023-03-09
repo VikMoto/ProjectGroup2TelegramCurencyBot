@@ -157,10 +157,12 @@ public class BotUserService {
 //                  result = bank.name() + "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(Currency.USD), Currency.USD, getPrecision(userId));
 //
 //            }
-            System.out.println("getCurrencies(userId).contains(Currency.EUR) = " + getCurrencies(userId).contains(Currency.EUR));
+            System.out.println("getCurrencies(userId).contains(Currency.EUR) = " + getCurrencies(userId)
+                    .contains(Currency.EUR));
             if (getCurrencies(userId).contains(Currency.EUR)) {
                 CurrencyService currencyService = new PrivatBankCurrencyService();
-                result =  "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(Currency.EUR), Currency.EUR, getPrecision(userId));
+                result =  "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(Currency.EUR),
+                        Currency.EUR, getPrecision(userId));
                 System.out.println("result = " + result);
 
             }
