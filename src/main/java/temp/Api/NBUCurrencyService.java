@@ -35,7 +35,7 @@ public class NBUCurrencyService implements CurrencyService {
         List<CurrencyRateResponseNBU> currencyItemNBUs = new Gson().fromJson(NBU_RESPONSE, collectionType);
 
         BigDecimal buy = getCurrency(CurrencyRateResponseNBU::getRate, currencyItemNBUs, currency);
-        BigDecimal sell = buy.multiply(BigDecimal.valueOf(0.95));
+        BigDecimal sell = buy;
 
         HashMap<String, BigDecimal> nbuRate = new HashMap<>();
         nbuRate.put("buy" + currency, buy);
