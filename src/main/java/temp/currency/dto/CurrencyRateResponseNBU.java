@@ -1,10 +1,15 @@
 package temp.currency.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
-public class CurrencyRateResponseNBU {
-    String currencyName;
-    String baseСurrency;
-    private BigDecimal buyRate;
-    private BigDecimal sellRate;
+@Data
+public class CurrencyRateResponseNBU implements CurrencyRateResponse{
+    private Long r030;
+    private String txt;
+    private BigDecimal rate;
+    private Currency cc;
+    private String exchangedate;
+
 }
