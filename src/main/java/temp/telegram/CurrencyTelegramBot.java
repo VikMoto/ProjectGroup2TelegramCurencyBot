@@ -124,9 +124,10 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 break;
             case "bank":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+                service.setBank(chatId, Bank.NBU);
                 BankMenu bank = new BankMenu();
                 try {
-                    execute(bank.getMessage(chatId, messageId));
+                    execute(bank.getMessage(chatId, messageId, service.getBank(chatId)));
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }

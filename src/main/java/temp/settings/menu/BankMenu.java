@@ -3,13 +3,14 @@ package temp.settings.menu;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import temp.currency.dto.Bank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class BankMenu {
-    public SendMessage getMessage(Long chatId, Integer messageId) {
+    public SendMessage getMessage(Long chatId, Integer messageId, Bank bank) {
         String helloText = "Please choose the Bank";
 
         SendMessage message = new SendMessage();
@@ -18,19 +19,19 @@ public class BankMenu {
 
         InlineKeyboardButton btn1 = InlineKeyboardButton
                 .builder()
-                .text("MonoBank")
+                .text(bank.name().equals("MonoBank") ? "✅ MonoBank" : "MonoBank")
                 .callbackData("setBankMonoBank")
                 .build();
 
         InlineKeyboardButton btn2 = InlineKeyboardButton
                 .builder()
-                .text("NBU")
+                .text(bank.name().equals("NBU") ? "✅ NBU" : "NBU")
                 .callbackData("setBankNBU")
                 .build();
 
         InlineKeyboardButton btn3 = InlineKeyboardButton
                 .builder()
-                .text("Privat")
+                .text(bank.name().equals("PrivatBank") ? "✅ PrivatBank" : "PrivatBank")
                 .callbackData("setBankPrivat")
                 .build();
 
