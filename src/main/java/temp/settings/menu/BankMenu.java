@@ -12,7 +12,6 @@ import java.util.List;
 public class BankMenu {
     public SendMessage getMessage(Long chatId, Integer messageId, Bank bank) {
         String helloText = "Please choose the Bank";
-
         SendMessage message = new SendMessage();
         message.setText(helloText);
         message.setChatId(chatId);

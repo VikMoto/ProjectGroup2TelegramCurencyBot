@@ -11,6 +11,7 @@ import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
 import temp.settings.BotUserService;
 import temp.settings.menu.BankMenu;
+import temp.settings.menu.PricePrecisionMenu;
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
 import temp.ui.PrettyPrintCurrencyServise;
@@ -119,8 +120,13 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 answerCallbackQuery.setText("You chose settings");
                 break;
             case "price precision":
-                sendOptionsMessagePricePrecision(chatId, messageId, "price precision");
-                answerCallbackQuery.setText("You chose price precision");
+                PricePrecisionMenu pricePrecisionMenu = new PricePrecisionMenu();
+                try {
+                    execute(pricePrecisionMenu.getMessage(chatId, messageId, service.getPrecision(chatId)));
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
+                answerCallbackQuery.setText("You selected price precision");
                 break;
             case "bank":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
@@ -207,55 +213,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 .callbackData("time notification")
                 .build();
         InlineKeyboardButton button5 = InlineKeyboardButton.builder()
-                .text("Return main manu")
-                .callbackData("start")
-                .build();
-
-        keyboard.add(Arrays.asList(button1));
-        keyboard.add(Arrays.asList(button2));
-        keyboard.add(Arrays.asList(button3));
-        keyboard.add(Arrays.asList(button4));
-        keyboard.add(Arrays.asList(button5));
-
-        final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
-                .builder()
-                .keyboard(keyboard)
-                .build();
-
-        message.setReplyMarkup(keyboardMarkup);
-        message.setReplyToMessageId(messageId);
-        try {
-            execute(message);
-        } catch (Exception e) {
-            // Handle exception
-        }
-    }
-
-    private void sendOptionsMessagePricePrecision(Long chatId, Integer messageId, String text) {
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(text);
-
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-
-        InlineKeyboardButton button1 = InlineKeyboardButton.builder()
-                .text("2")
-                .callbackData("2")
-                .build();
-        InlineKeyboardButton button2 = InlineKeyboardButton.builder()
-                .text("3")
-                .callbackData("3")
-                .build();
-        InlineKeyboardButton button3 = InlineKeyboardButton.builder()
-                .text("4")
-                .callbackData("4")
-                .build();
-        InlineKeyboardButton button4 = InlineKeyboardButton.builder()
-                .text("Time notification")
-                .callbackData("time notification")
-                .build();
-        InlineKeyboardButton button5 = InlineKeyboardButton.builder()
-                .text("Return main manu")
+                .text("Return main menu")
                 .callbackData("start")
                 .build();
 
