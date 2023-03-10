@@ -10,7 +10,7 @@ import temp.currency.dto.Bank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-@Slf4j
+
 @AllArgsConstructor
 public class BankMenu {
 
@@ -18,7 +18,7 @@ public class BankMenu {
     Long chatId;
 
     public SendMessage getMessage(Long chatId) {
-        log.info("open Bank menu");
+
         String helloText = "Please choose the Bank";
         System.out.println("checkout = " + checkout);
         System.out.println("chatId = " + chatId);

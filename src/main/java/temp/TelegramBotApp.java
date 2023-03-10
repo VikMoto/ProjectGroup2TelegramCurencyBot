@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
 
-@Slf4j
+
 public class TelegramBotApp {
     public static void main(String[] args) throws IOException {
         TelegramBotService botService = new TelegramBotService();
-        log.info("API starts working");
+
         //Privat bank test
         CurrencyService currencyService = new PrivatBankCurrencyService();
         Currency currency = Currency.USD;

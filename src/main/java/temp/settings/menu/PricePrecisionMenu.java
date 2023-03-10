@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PricePrecisionMenu {
-    public SendMessage getMessage(Long chatId, Integer messageId, int precision ) {
+    public SendMessage getMessage(Long chatId, int precision ) {
         String helloText = "Please select the rounding precision: ";
         SendMessage message = new SendMessage();
         message.setText(helloText);
@@ -40,7 +40,6 @@ public class PricePrecisionMenu {
                 .build();
 
         message.setReplyMarkup(keyboardMarkup);
-        message.setReplyToMessageId(messageId);
 
         return message;
     }

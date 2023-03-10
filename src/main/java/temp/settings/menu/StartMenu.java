@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Slf4j
+
 @AllArgsConstructor
 public class StartMenu {
 
     Long chatId;
 
     public SendMessage getMessage() {
-        log.info("open Start menu");
+
         String helloText = "Please make Your Choice";
 
         System.out.println("chatId = " + chatId);
@@ -35,7 +35,6 @@ public class StartMenu {
                 .text("Settings")
                 .callbackData("settings")
                 .build();
-
 
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

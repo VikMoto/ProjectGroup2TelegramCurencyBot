@@ -1,5 +1,6 @@
 package temp.settings.menu;
 
+import lombok.AllArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -8,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+@AllArgsConstructor
 public class NotificationsTime {
     String checkout;
+    Long chatId;
 
-    public SendMessage getMessage(Long chatId, Integer messageId) {
+    public SendMessage getMessage() {
         String helloText = "Please choose the notification time";
 
         SendMessage message = new SendMessage();

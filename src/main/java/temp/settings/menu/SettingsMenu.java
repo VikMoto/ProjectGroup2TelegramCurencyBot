@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Slf4j
+
 @AllArgsConstructor
 public class SettingsMenu {
     Long chatId;
 
     public SendMessage getMessage() {
 
-        log.info("open Settings menu");
 
         String helloText = "Please make Your Choice";
 

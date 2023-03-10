@@ -103,91 +103,128 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         StartCommand startCommand = new StartCommand();
         switch (callbackData) {
             case "getInformation":
-                //static service in code for now
-
-                String answerFromMenu = service.getInfo(chatId);
-                getAnswerMessage(chatId, answerFromMenu);
-                execute(new StartMenu(chatId).getMessage());
-
+                handleGetInformation(chatId, service);
                 break;
             case "settings":
-                execute(new SettingsMenu(chatId).getMessage());
-                answerCallbackQuery.setText("You chose settings");
+                handleSettingsMainMenu(chatId, answerCallbackQuery);
                 break;
             case "price precision":
-                PricePrecisionMenu pricePrecisionMenu = new PricePrecisionMenu();
-                try {
-                    execute(pricePrecisionMenu.getMessage(chatId, messageId, service.getPrecision(chatId)));
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
-                answerCallbackQuery.setText("You selected price precision");
+                handlePricePrecision(chatId, answerCallbackQuery, service);
                 break;
             case "pricePrecision2":
-                service.setPrecision(chatId, 2);
-                getAnswerMessage(chatId, "Number of decimal places: " + service.getPrecision(chatId));
-                execute(new StartMenu(chatId).getMessage());
+                handlePricePrecisionSelection(chatId, 2,  service);
                 break;
             case "pricePrecision3":
-                service.setPrecision(chatId, 3);
-                getAnswerMessage(chatId, "Number of decimal places: " + service.getPrecision(chatId));
-                execute(new StartMenu(chatId).getMessage());
+                handlePricePrecisionSelection(chatId, 3,  service);
                 break;
             case "pricePrecision4":
-                service.setPrecision(chatId, 4);
-                getAnswerMessage(chatId, "Number of decimal places: " + service.getPrecision(chatId));
-                execute(new StartMenu(chatId).getMessage());
+                handlePricePrecisionSelection(chatId, 4,  service);
                 break;
             case "bank":
-                //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
-
-
-                BankMenu bank = new BankMenu(service.getBank(chatId).name(), chatId);
-                try {
-                    execute(bank.getMessage(chatId));
-
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
-
-                answerCallbackQuery.setText("You chose bank");
+                handleBankSelection(chatId, answerCallbackQuery, service);
                 break;
             case "setBankNBU":
-                service.setBank(chatId,Bank.NBU);
-                getAnswerMessage(chatId, "You set Bank as " + service.getBank(chatId).name());
-                execute(new StartMenu(chatId).getMessage());
+                handleSetBankSelection(chatId, service, Bank.NBU);
                 break;
             case "setBankMonoBank":
-                service.setBank(chatId,Bank.MonoBank);
-                getAnswerMessage(chatId, "You set Bank as " + service.getBank(chatId).name());
-                execute(new StartMenu(chatId).getMessage());
+                handleSetBankSelection(chatId, service, Bank.MonoBank);
                 break;
             case "setBankPrivat":
-                service.setBank(chatId,Bank.PrivatBank);
-                getAnswerMessage(chatId, "You set Bank as " + service.getBank(chatId).name());
-                execute(new StartMenu(chatId).getMessage());
+                handleSetBankSelection(chatId, service, Bank.PrivatBank);
                 break;
 
             case "currency":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
                 answerCallbackQuery.setText("You chose currency");
                 break;
-            case "time notification":
-                //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
-                NotificationsTime notificationsTime = new NotificationsTime();
-                try {
-                    execute(notificationsTime.getMessage(chatId, messageId));
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
-                answerCallbackQuery.setText("You chose time notification");
-                break;
-            case "start":
-                // If callback data is "start", send the start message again
 
-                startCommand.execute(this, callbackQuery.getFrom(), callbackQuery.getMessage().getChat(), null);
+            case "time notification":
+                NotificationsTime notificationsTime = new NotificationsTime(String.valueOf(service.getSchedulerTime(chatId)),chatId);
+                execute(notificationsTime.getMessage());
                 break;
+            case "cancelNotifications":
+                service.setScheduler(chatId, false);
+                //todo remove service.getScheduler(chatId) after all test
+                getAnswerMessage(chatId, "You Cancel Notifications " + service.getScheduler(chatId));
+                execute(new StartMenu(chatId).getMessage());
+                break;
+            case "9":
+                handleSchedulerTimeSelection(chatId, 9,  service);
+                break;
+            case "10":
+                handleSchedulerTimeSelection(chatId, 10,  service);
+                break;
+            case "11":
+                handleSchedulerTimeSelection(chatId, 11,  service);
+                break;
+            case "12":
+                handleSchedulerTimeSelection(chatId, 12,  service);
+                break;
+            case "13":
+                handleSchedulerTimeSelection(chatId, 13,  service);
+                break;
+            case "14":
+                handleSchedulerTimeSelection(chatId, 14,  service);
+                break;
+            case "15":
+                handleSchedulerTimeSelection(chatId, 15,  service);
+                break;
+            case "16":
+                handleSchedulerTimeSelection(chatId, 16,  service);
+                break;
+            case "17":
+                handleSchedulerTimeSelection(chatId, 17,  service);
+                break;
+            case "18":
+                handleSchedulerTimeSelection(chatId, 18,  service);
+                break;
+
+
         }
+    }
+
+    private void handleSchedulerTimeSelection(Long chatId, int time, BotUserService service) throws TelegramApiException {
+        service.setSchedulerTime(chatId, time);
+        service.setScheduler(chatId, true);
+        //todo remove " time notifications is " + service.getScheduler(chatId) after all tests
+        getAnswerMessage(chatId, "You set Time as " + service.getSchedulerTime(chatId) +
+                " time notifications is " + service.getScheduler(chatId));
+        execute(new StartMenu(chatId).getMessage());
+    }
+
+    private void handleSettingsMainMenu(Long chatId, AnswerCallbackQuery answerCallbackQuery) throws TelegramApiException {
+        execute(new SettingsMenu(chatId).getMessage());
+        answerCallbackQuery.setText("You chose settings");
+    }
+
+    private void handleBankSelection(Long chatId, AnswerCallbackQuery answerCallbackQuery, BotUserService service) throws TelegramApiException {
+        BankMenu bank = new BankMenu(service.getBank(chatId).name(), chatId);
+        execute(bank.getMessage(chatId));
+        answerCallbackQuery.setText("You chose bank");
+    }
+
+    private void handleSetBankSelection(Long chatId, BotUserService service, Bank bank) throws TelegramApiException {
+        service.setBank(chatId,bank);
+        getAnswerMessage(chatId, "You set Bank as " + service.getBank(chatId).name());
+        execute(new StartMenu(chatId).getMessage());
+    }
+
+    private void handlePricePrecisionSelection(Long chatId, int precision, BotUserService service) throws TelegramApiException {
+        service.setPrecision(chatId, precision);
+        getAnswerMessage(chatId, "Number of decimal places: " + service.getPrecision(chatId));
+        execute(new StartMenu(chatId).getMessage());
+    }
+
+    private void handlePricePrecision(Long chatId, AnswerCallbackQuery answerCallbackQuery, BotUserService service) throws TelegramApiException {
+        PricePrecisionMenu pricePrecisionMenu = new PricePrecisionMenu();
+        execute(pricePrecisionMenu.getMessage(chatId, service.getPrecision(chatId)));
+        answerCallbackQuery.setText("You selected price precision");
+    }
+
+    private void handleGetInformation(Long chatId, BotUserService service) throws IOException, TelegramApiException {
+        String answerFromMenu = service.getInfo(chatId);
+        getAnswerMessage(chatId, answerFromMenu);
+        execute(new StartMenu(chatId).getMessage());
     }
 
     private void getAnswerMessage(Long chatId, String message) throws TelegramApiException {
@@ -195,54 +232,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         sendMessage.setText(message);
         sendMessage.setChatId(Long.toString(chatId));
         execute(sendMessage);
-    }
-
-
-    private void sendOptionsMessage(Long chatId, Integer messageId, String text) {
-
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(text);
-
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-
-        InlineKeyboardButton button1 = InlineKeyboardButton.builder()
-
-                .text("Price precision")
-                .callbackData("price precision")
-                .build();
-        InlineKeyboardButton button2 = InlineKeyboardButton.builder()
-                .text("Bank")
-                .callbackData("bank")
-                .build();
-        InlineKeyboardButton button3 = InlineKeyboardButton.builder()
-                .text("Currencies")
-                .callbackData("currencies")
-
-                .build();
-        InlineKeyboardButton button4 = InlineKeyboardButton.builder()
-                .text("Time notification")
-                .callbackData("time notification")
-                .build();
-
-
-        keyboard.add(Arrays.asList(button1));
-        keyboard.add(Arrays.asList(button2));
-        keyboard.add(Arrays.asList(button3));
-        keyboard.add(Arrays.asList(button4));
-
-        final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
-                .builder()
-                .keyboard(keyboard)
-                .build();
-
-        message.setReplyMarkup(keyboardMarkup);
-        message.setReplyToMessageId(messageId);
-        try {
-            execute(message);
-        } catch (Exception e) {
-            // Handle exception
-        }
     }
 
     @Override
