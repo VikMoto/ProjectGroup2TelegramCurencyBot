@@ -2,25 +2,16 @@ package temp.telegram;
 
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import temp.Api.CurrencyService;
-
 import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Bank;
 import temp.settings.menu.NotificationsTime;
-import temp.currency.dto.Currency;
 import temp.settings.BotUserService;
-
 import temp.settings.menu.BankMenu;
-
 import temp.settings.menu.PricePrecisionMenu;
-
 import temp.settings.menu.SettingsMenu;
 import temp.settings.menu.StartMenu;
-
-
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
 import temp.ui.PrettyPrintCurrencyServise;
@@ -29,7 +20,6 @@ import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingC
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
 import java.io.IOException;
 import java.util.*;
 

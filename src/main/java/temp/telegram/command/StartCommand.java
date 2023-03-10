@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import temp.settings.BotUserService;
+import temp.settings.menu.StartMenu;
 
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class StartCommand extends BotCommand {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(text);
         sendMessage.setChatId(Long.toString(chat.getId()));
-//        SendMessage message = new SendMessage(String.valueOf(chatId), "Please choose a value:");
+
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
         InlineKeyboardButton button1 = InlineKeyboardButton.builder()
@@ -48,15 +49,12 @@ public class StartCommand extends BotCommand {
         keyboard.add(Arrays.asList(button1));
         keyboard.add(Arrays.asList(button2));
 
-
-
-
         /** create keyboard from List */
         final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
                 .builder()
                 .keyboard(keyboard)
                 .build();
-//        markup.setKeyboard(keyboard);
+
         sendMessage.setReplyMarkup(keyboardMarkup);
         try {
             absSender.execute(sendMessage);

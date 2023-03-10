@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import org.jsoup.Jsoup;
 import temp.currency.dto.Currency;
 import temp.currency.dto.CurrencyRateResponseNBU;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
