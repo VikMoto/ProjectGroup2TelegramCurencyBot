@@ -6,16 +6,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import temp.Api.CurrencyService;
+
 import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Bank;
+import temp.settings.menu.NotificationsTime;
 import temp.currency.dto.Currency;
 import temp.settings.BotUserService;
+
 import temp.settings.menu.BankMenu;
 
 import temp.settings.menu.PricePrecisionMenu;
 
 import temp.settings.menu.SettingsMenu;
 import temp.settings.menu.StartMenu;
+
 
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
@@ -91,6 +95,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     }
 
+
+
     private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) throws IOException, TelegramApiException {
         SendMessage answer;
         BotUserService service = BotUserService.getInstance();
@@ -98,9 +104,11 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         switch (callbackData) {
             case "getInformation":
                 //static service in code for now
+
                 String answerFromMenu = service.getInfo(chatId);
                 getAnswerMessage(chatId, answerFromMenu);
                 execute(new StartMenu(chatId).getMessage());
+
                 break;
             case "settings":
                 execute(new SettingsMenu(chatId).getMessage());
@@ -118,6 +126,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             case "bank":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
 
+
                 BankMenu bank = new BankMenu(service.getBank(chatId).name(), chatId);
                 try {
                     execute(bank.getMessage(chatId));
@@ -125,6 +134,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
+
                 answerCallbackQuery.setText("You chose bank");
                 break;
             case "setBankNBU":
@@ -149,6 +159,12 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 break;
             case "time notification":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+                NotificationsTime notificationsTime = new NotificationsTime();
+                try {
+                    execute(notificationsTime.getMessage(chatId, messageId));
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
                 answerCallbackQuery.setText("You chose time notification");
                 break;
             case "start":
@@ -193,8 +209,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 .text("Time notification")
                 .callbackData("time notification")
                 .build();
-
-
 
 
         keyboard.add(Arrays.asList(button1));
