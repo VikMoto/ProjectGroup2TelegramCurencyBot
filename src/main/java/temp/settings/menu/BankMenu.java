@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import temp.currency.dto.Bank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class BankMenu {
+
     String checkout;
     Long chatId;
 
@@ -21,25 +23,32 @@ public class BankMenu {
         System.out.println("checkout = " + checkout);
         System.out.println("chatId = " + chatId);
 
+
         SendMessage message = new SendMessage();
         message.setText(helloText);
         message.setChatId(chatId);
 
         InlineKeyboardButton btn1 = InlineKeyboardButton
                 .builder()
+
                 .text(this.checkout.equals("MonoBank") ? "✅ MonoBank" : "MonoBank")
+
                 .callbackData("setBankMonoBank")
                 .build();
 
         InlineKeyboardButton btn2 = InlineKeyboardButton
                 .builder()
+
                 .text(this.checkout.equals("NBU") ? "✅ NBU" : "NBU")
+
                 .callbackData("setBankNBU")
                 .build();
 
         InlineKeyboardButton btn3 = InlineKeyboardButton
                 .builder()
+
                 .text(this.checkout.equals("PrivatBank") ? "✅ Privat" : "Privat")
+
                 .callbackData("setBankPrivat")
                 .build();
 

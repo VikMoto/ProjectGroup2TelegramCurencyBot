@@ -11,8 +11,12 @@ import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
 import temp.settings.BotUserService;
 import temp.settings.menu.BankMenu;
+
+import temp.settings.menu.PricePrecisionMenu;
+
 import temp.settings.menu.SettingsMenu;
 import temp.settings.menu.StartMenu;
+
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
 import temp.ui.PrettyPrintCurrencyServise;
@@ -103,14 +107,21 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 answerCallbackQuery.setText("You chose settings");
                 break;
             case "price precision":
-                sendOptionsMessagePricePrecision(chatId, messageId, "price precision");
-                answerCallbackQuery.setText("You chose price precision");
+                PricePrecisionMenu pricePrecisionMenu = new PricePrecisionMenu();
+                try {
+                    execute(pricePrecisionMenu.getMessage(chatId, messageId, service.getPrecision(chatId)));
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
+                answerCallbackQuery.setText("You selected price precision");
                 break;
             case "bank":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+
                 BankMenu bank = new BankMenu(service.getBank(chatId).name(), chatId);
                 try {
                     execute(bank.getMessage(chatId));
+
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
@@ -156,8 +167,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     }
 
 
+    private void sendOptionsMessage(Long chatId, Integer messageId, String text) {
 
-    private void sendOptionsMessagePricePrecision(Long chatId, Integer messageId, String text) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
@@ -165,21 +176,25 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
         InlineKeyboardButton button1 = InlineKeyboardButton.builder()
-                .text("2")
-                .callbackData("2")
+
+                .text("Price precision")
+                .callbackData("price precision")
                 .build();
         InlineKeyboardButton button2 = InlineKeyboardButton.builder()
-                .text("3")
-                .callbackData("3")
+                .text("Bank")
+                .callbackData("bank")
                 .build();
         InlineKeyboardButton button3 = InlineKeyboardButton.builder()
-                .text("4")
-                .callbackData("4")
+                .text("Currencies")
+                .callbackData("currencies")
+
                 .build();
         InlineKeyboardButton button4 = InlineKeyboardButton.builder()
                 .text("Time notification")
                 .callbackData("time notification")
                 .build();
+
+
 
 
         keyboard.add(Arrays.asList(button1));
