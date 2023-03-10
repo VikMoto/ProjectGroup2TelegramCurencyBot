@@ -5,19 +5,12 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-
 import temp.Api.CurrencyService;
-
-
 import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
-
-import temp.settings.menu.Bank;
-
 import temp.settings.BotUserService;
-
+import temp.settings.menu.BankMenu;
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
 import temp.ui.PrettyPrintCurrencyServise;
@@ -27,7 +20,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-
 import java.io.IOException;
 import java.util.*;
 
@@ -35,6 +27,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     private CurrencyService currencyService;
     private PrettyPrintCurrencyServise prettyPrintCurrencyServise;
+
     public CurrencyTelegramBot() {
         currencyService = new PrivatBankCurrencyService();
         prettyPrintCurrencyServise = new PrettyPrintCurrencyServise();
@@ -82,7 +75,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
             handle(callbackQuery, callbackData, chatId, messageId, answerCallbackQuery);
 
-
             try {
                 execute(answerCallbackQuery);
             } catch (Exception e) {
@@ -93,12 +85,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     }
 
-
-
     private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) throws IOException, TelegramApiException {
 
         BotUserService service = BotUserService.getInstance();
-
 
         switch (callbackData) {
             case "getInformation":
@@ -120,12 +109,10 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 ////                answerCallbackQuery.setText("formatedRate = " + formatedRate);
 
 
-
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setText(serviceInfo);
                 sendMessage.setChatId(Long.toString(chatId));
                 execute(sendMessage);
-
                 break;
             case "settings":
                 sendOptionsMessage(chatId, messageId, "settings");
@@ -137,7 +124,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 break;
             case "bank":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
-                Bank bank = new Bank();
+                BankMenu bank = new BankMenu();
                 try {
                     execute(bank.getMessage(chatId, messageId));
                 } catch (TelegramApiException e) {
@@ -158,15 +145,11 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 StartCommand startCommand = new StartCommand();
                 startCommand.execute(this, callbackQuery.getFrom(), callbackQuery.getMessage().getChat(), null);
                 break;
-
-
         }
     }
 
     public SendMessage getMessage(Long chatId) throws IOException {
         BotUserService botUserService = BotUserService.getInstance();
-
-
         String helloText = botUserService.getInfo(chatId);
         SendMessage message = new SendMessage();//same code
         message.setText(helloText);
@@ -246,6 +229,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             // Handle exception
         }
     }
+
     private void sendOptionsMessagePricePrecision(Long chatId, Integer messageId, String text) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
