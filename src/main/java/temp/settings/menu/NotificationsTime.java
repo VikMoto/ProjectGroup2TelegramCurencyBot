@@ -3,6 +3,7 @@ package temp.settings.menu;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public class NotificationsTime {
     String checkout;
+
     public SendMessage getMessage(Long chatId, Integer messageId) {
         String helloText = "Please choose the notification time";
 

@@ -29,6 +29,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     private CurrencyService currencyService;
     private PrettyPrintCurrencyServise prettyPrintCurrencyServise;
+
     public CurrencyTelegramBot() {
         currencyService = new PrivatBankCurrencyService();
         prettyPrintCurrencyServise = new PrettyPrintCurrencyServise();
@@ -88,7 +89,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     }
 
 
-
     private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) throws IOException, TelegramApiException {
 
         BotUserService service = BotUserService.getInstance();
@@ -112,7 +112,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 //                System.out.println("serviceInfo = " + serviceInfo);
 //                answerCallbackQuery.setText("serviceInfo = " + serviceInfo);
 ////                answerCallbackQuery.setText("formatedRate = " + formatedRate);
-
 
 
                 SendMessage sendMessage = new SendMessage();
@@ -240,7 +239,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             // Handle exception
         }
     }
-        private void sendOptionsMessagePricePrecision(Long chatId, Integer messageId, String text) {
+
+    private void sendOptionsMessagePricePrecision(Long chatId, Integer messageId, String text) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
@@ -287,6 +287,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             // Handle exception
         }
     }
+
     @Override
     public void processInvalidCommandUpdate(Update update) {
         super.processInvalidCommandUpdate(update);
