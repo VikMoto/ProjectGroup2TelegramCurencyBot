@@ -4,9 +4,11 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import temp.currency.CurrencyService;
 import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Currency;
+import temp.settings.menu.Bank;
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
 import temp.ui.PrettyPrintCurrencyServise;
@@ -102,6 +104,12 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 break;
             case "bank":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
+                Bank bank = new Bank();
+                try {
+                    execute(bank.getMessage(chatId, messageId));
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
                 answerCallbackQuery.setText("You chose bank");
                 break;
             case "currencies":
@@ -169,7 +177,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             // Handle exception
         }
     }
-        private void sendOptionsMessagePricePrecision(Long chatId, Integer messageId, String text) {
+    private void sendOptionsMessagePricePrecision(Long chatId, Integer messageId, String text) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
@@ -216,6 +224,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             // Handle exception
         }
     }
+
     @Override
     public void processInvalidCommandUpdate(Update update) {
         super.processInvalidCommandUpdate(update);
