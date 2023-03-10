@@ -115,6 +115,21 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 }
                 answerCallbackQuery.setText("You selected price precision");
                 break;
+            case "pricePrecision2":
+                service.setPrecision(chatId, 2);
+                getAnswerMessage(chatId, "Number of decimal places: " + service.getPrecision(chatId));
+                execute(new StartMenu(chatId).getMessage());
+                break;
+            case "pricePrecision3":
+                service.setPrecision(chatId, 3);
+                getAnswerMessage(chatId, "Number of decimal places: " + service.getPrecision(chatId));
+                execute(new StartMenu(chatId).getMessage());
+                break;
+            case "pricePrecision4":
+                service.setPrecision(chatId, 4);
+                getAnswerMessage(chatId, "Number of decimal places: " + service.getPrecision(chatId));
+                execute(new StartMenu(chatId).getMessage());
+                break;
             case "bank":
                 //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
 
