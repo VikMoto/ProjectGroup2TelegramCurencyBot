@@ -19,25 +19,20 @@ public class PricePrecisionMenu {
 
         InlineKeyboardButton button1 = InlineKeyboardButton.builder()
                 .text(precision == 2 ? "✅ 2" : "2")
-                .callbackData("2")
+                .callbackData("pricePrecision2")
                 .build();
         InlineKeyboardButton button2 = InlineKeyboardButton.builder()
                 .text(precision == 3 ? "✅ 3" : "3")
-                .callbackData("3")
+                .callbackData("pricePrecision3")
                 .build();
         InlineKeyboardButton button3 = InlineKeyboardButton.builder()
                 .text(precision == 4 ? "✅ 4" : "4")
-                .callbackData("4")
-                .build();
-        InlineKeyboardButton button4 = InlineKeyboardButton.builder()
-                .text("Return to the main menu")
-                .callbackData("start")
+                .callbackData("pricePrecision4")
                 .build();
 
         keyboard.add(Arrays.asList(button1));
         keyboard.add(Arrays.asList(button2));
         keyboard.add(Arrays.asList(button3));
-        keyboard.add(Arrays.asList(button4));
 
         final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
                 .builder()
