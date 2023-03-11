@@ -59,6 +59,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     @SneakyThrows
     @Override
     public void processNonCommandUpdate(Update update) {
+        StartCommand startCommand = new StartCommand();
+        BotUserService service = BotUserService.getInstance();
         if (update.hasCallbackQuery()) {
 
             CallbackQuery callbackQuery = update.getCallbackQuery();
@@ -67,109 +69,80 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             CallbackQuery query = update.getCallbackQuery();
             String callbackData = query.getData();
             Long chatId = query.getMessage().getChatId();
-            Integer messageId = query.getMessage().getMessageId();
 
             AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
 
             answerCallbackQuery.setCallbackQueryId(query.getId());
 
-            handle(callbackQuery, callbackData, chatId, messageId, answerCallbackQuery);
 
-            try {
-                execute(answerCallbackQuery);
-            } catch (Exception e) {
-                // Handle exception
-            }
+            handleMainMenu(callbackData, chatId, service, answerCallbackQuery);
+
+            handlePricePrecision(service, callbackData, chatId);
+
+            handleNotificationTime(service, callbackData, chatId);
+
+            handleSetBank(service, callbackData, chatId);
+
+            execute(answerCallbackQuery);
 
         }
 
     }
 
+    private void handleSetBank(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
+        if (callbackData.contains("setBank")) {
+            switch (callbackData) {
+                case "setBankNBU" -> handleSetBankSelection(chatId, service, Bank.NBU);
+                case "setBankMonoBank" -> handleSetBankSelection(chatId, service, Bank.MonoBank);
+                case "setBankPrivat" -> handleSetBankSelection(chatId, service, Bank.PrivatBank);
+            }
+        }
+    }
+    private void handleNotificationTime(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
+        if (callbackData.contains("noticeTime")){
+            switch (callbackData) {
+                case "noticeTimeCancelNotifications" -> {
+                    service.setScheduler(chatId, false);
+                    //todo remove service.getScheduler(chatId) after all test
+                    getAnswerMessage(chatId, "You Cancel Notifications " + service.getScheduler(chatId));
+                    execute(new StartMenu(chatId).getMessage());
+                }
+                case "noticeTime9" -> handleSchedulerTimeSelection(chatId, 9, service);
+                case "noticeTime10" -> handleSchedulerTimeSelection(chatId, 10, service);
+                case "noticeTime11" -> handleSchedulerTimeSelection(chatId, 11, service);
+                case "noticeTime12" -> handleSchedulerTimeSelection(chatId, 12, service);
+                case "noticeTime13" -> handleSchedulerTimeSelection(chatId, 13, service);
+                case "noticeTime14" -> handleSchedulerTimeSelection(chatId, 14, service);
+                case "noticeTime15" -> handleSchedulerTimeSelection(chatId, 15, service);
+                case "noticeTime16" -> handleSchedulerTimeSelection(chatId, 16, service);
+                case "noticeTime17" -> handleSchedulerTimeSelection(chatId, 17, service);
+                case "noticeTime18" -> handleSchedulerTimeSelection(chatId, 18, service);
+            }
+        }
+    }
+
+    private void handlePricePrecision(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
+        if (callbackData.contains("pricePrecision")) {
+            switch (callbackData) {
+                case "pricePrecision2" -> handlePricePrecisionSelection(chatId, 2, service);
+                case "pricePrecision3" -> handlePricePrecisionSelection(chatId, 3, service);
+                case "pricePrecision4" -> handlePricePrecisionSelection(chatId, 4, service);
+            }
+        }
+    }
 
 
-    private void handle(CallbackQuery callbackQuery, String callbackData, Long chatId, Integer messageId, AnswerCallbackQuery answerCallbackQuery) throws IOException, TelegramApiException {
-        SendMessage answer;
-        BotUserService service = BotUserService.getInstance();
-        StartCommand startCommand = new StartCommand();
+    private void handleMainMenu(String callbackData, Long chatId, BotUserService service, AnswerCallbackQuery answerCallbackQuery) throws IOException, TelegramApiException {
         switch (callbackData) {
-            case "getInformation":
-                handleGetInformation(chatId, service);
-                break;
-            case "settings":
-                handleSettingsMainMenu(chatId, answerCallbackQuery);
-                break;
-            case "price precision":
-                handlePricePrecision(chatId, answerCallbackQuery, service);
-                break;
-            case "pricePrecision2":
-                handlePricePrecisionSelection(chatId, 2,  service);
-                break;
-            case "pricePrecision3":
-                handlePricePrecisionSelection(chatId, 3,  service);
-                break;
-            case "pricePrecision4":
-                handlePricePrecisionSelection(chatId, 4,  service);
-                break;
-            case "bank":
-                handleBankSelection(chatId, answerCallbackQuery, service);
-                break;
-            case "setBankNBU":
-                handleSetBankSelection(chatId, service, Bank.NBU);
-                break;
-            case "setBankMonoBank":
-                handleSetBankSelection(chatId, service, Bank.MonoBank);
-                break;
-            case "setBankPrivat":
-                handleSetBankSelection(chatId, service, Bank.PrivatBank);
-                break;
-
-            case "currency":
-                //                    sendOptionsMessage2(chatId, messageId, "You chose Отримати інфо. Choose another value:");
-                answerCallbackQuery.setText("You chose currency");
-                break;
-
-            case "time notification":
-                NotificationsTime notificationsTime = new NotificationsTime(String.valueOf(service.getSchedulerTime(chatId)),chatId);
+            case "getInformation" -> handleGetInformation(chatId, service);
+            case "settings" -> handleSettingsMainMenu(chatId, answerCallbackQuery);
+            case "price precision" -> handlePricePrecision(chatId, answerCallbackQuery, service);
+            case "bank" -> handleBankSelection(chatId, answerCallbackQuery, service);
+            case "currency" -> answerCallbackQuery.setText("You chose currency");
+            case "time notification" -> {
+                NotificationsTime notificationsTime = new NotificationsTime(String.valueOf(service.getSchedulerTime(chatId)), chatId);
                 execute(notificationsTime.getMessage());
-                break;
-            case "cancelNotifications":
-                service.setScheduler(chatId, false);
-                //todo remove service.getScheduler(chatId) after all test
-                getAnswerMessage(chatId, "You Cancel Notifications " + service.getScheduler(chatId));
-                execute(new StartMenu(chatId).getMessage());
-                break;
-            case "9":
-                handleSchedulerTimeSelection(chatId, 9,  service);
-                break;
-            case "10":
-                handleSchedulerTimeSelection(chatId, 10,  service);
-                break;
-            case "11":
-                handleSchedulerTimeSelection(chatId, 11,  service);
-                break;
-            case "12":
-                handleSchedulerTimeSelection(chatId, 12,  service);
-                break;
-            case "13":
-                handleSchedulerTimeSelection(chatId, 13,  service);
-                break;
-            case "14":
-                handleSchedulerTimeSelection(chatId, 14,  service);
-                break;
-            case "15":
-                handleSchedulerTimeSelection(chatId, 15,  service);
-                break;
-            case "16":
-                handleSchedulerTimeSelection(chatId, 16,  service);
-                break;
-            case "17":
-                handleSchedulerTimeSelection(chatId, 17,  service);
-                break;
-            case "18":
-                handleSchedulerTimeSelection(chatId, 18,  service);
-                break;
-
-
+            }
         }
     }
 
