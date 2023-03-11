@@ -139,11 +139,14 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             case "price precision" -> handlePricePrecision(chatId, answerCallbackQuery, service);
             case "bank" -> handleBankSelection(chatId, answerCallbackQuery, service);
             case "currency" -> answerCallbackQuery.setText("You chose currency");
-            case "time notification" -> {
-                NotificationsTime notificationsTime = new NotificationsTime(String.valueOf(service.getSchedulerTime(chatId)), chatId);
-                execute(notificationsTime.getMessage());
-            }
+            case "time notification" -> handleTimeNoticeMainManu(chatId, service);
+
         }
+    }
+
+    private void handleTimeNoticeMainManu(Long chatId, BotUserService service) throws TelegramApiException {
+        NotificationsTime notificationsTime = new NotificationsTime(String.valueOf(service.getSchedulerTime(chatId)), chatId);
+        execute(notificationsTime.getMessage());
     }
 
     private void handleSchedulerTimeSelection(Long chatId, int time, BotUserService service) throws TelegramApiException {
