@@ -22,6 +22,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
@@ -100,23 +103,21 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     }
     private void handleNotificationTime(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
         if (callbackData.contains("noticeTime")){
-            switch (callbackData) {
-                case "noticeTimeCancelNotifications" -> {
-                    service.setScheduler(chatId, false);
-                    //todo remove service.getScheduler(chatId) after all test
+
+            if(callbackData.equals("noticeTimeCancelNotifications")) {
+                service.setScheduler(chatId, false);
+//                    //todo remove service.getScheduler(chatId) after all test
                     getAnswerMessage(chatId, "You Cancel Notifications " + service.getScheduler(chatId));
                     execute(new StartMenu(chatId).getMessage());
-                }
-                case "noticeTime9" -> handleSchedulerTimeSelection(chatId, 9, service);
-                case "noticeTime10" -> handleSchedulerTimeSelection(chatId, 10, service);
-                case "noticeTime11" -> handleSchedulerTimeSelection(chatId, 11, service);
-                case "noticeTime12" -> handleSchedulerTimeSelection(chatId, 12, service);
-                case "noticeTime13" -> handleSchedulerTimeSelection(chatId, 13, service);
-                case "noticeTime14" -> handleSchedulerTimeSelection(chatId, 14, service);
-                case "noticeTime15" -> handleSchedulerTimeSelection(chatId, 15, service);
-                case "noticeTime16" -> handleSchedulerTimeSelection(chatId, 16, service);
-                case "noticeTime17" -> handleSchedulerTimeSelection(chatId, 17, service);
-                case "noticeTime18" -> handleSchedulerTimeSelection(chatId, 18, service);
+            }
+
+            List<String> noticeTimeCallbackData = List.of("noticeTime9", "noticeTime10", "noticeTime11",
+                    "noticeTime12", "noticeTime13", "noticeTime14", "noticeTime15", "noticeTime16",
+                    "noticeTime17", "noticeTime18");
+            int index = noticeTimeCallbackData.indexOf(callbackData);
+            if (index >= 0) {
+                int hour = index + 9;
+                handleSchedulerTimeSelection(chatId, hour, service);
             }
         }
     }
