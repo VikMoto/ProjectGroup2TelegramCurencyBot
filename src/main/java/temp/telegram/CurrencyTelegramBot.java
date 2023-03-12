@@ -6,12 +6,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import temp.Api.CurrencyService;
 import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Bank;
-import temp.settings.menu.NotificationsTime;
+import temp.currency.dto.Currency;
+import temp.settings.menu.*;
 import temp.settings.BotUserService;
-import temp.settings.menu.BankMenu;
-import temp.settings.menu.PricePrecisionMenu;
-import temp.settings.menu.SettingsMenu;
-import temp.settings.menu.StartMenu;
 import temp.telegram.command.HelpCommand;
 import temp.telegram.command.StartCommand;
 import temp.ui.PrettyPrintCurrencyServise;
@@ -86,6 +83,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
             handleSetBank(service, callbackData, chatId);
 
+            handSetCurrency(service,callbackData,chatId);
+
             execute(answerCallbackQuery);
 
         }
@@ -101,14 +100,24 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             }
         }
     }
+    private void handSetCurrency(BotUserService service,String callbackData, Long chatId) throws TelegramApiException {
+        if(callbackData.contains("setCurrency")){
+            switch (callbackData){
+                case "setCurrencyUSD" -> handleSetCurrencySelection(chatId,service,Currency.USD);
+                case "setCurrencyEUR" -> handleSetCurrencySelection(chatId,service,Currency.EUR);
+
+
+            }
+        }
+    }
     private void handleNotificationTime(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
         if (callbackData.contains("noticeTime")){
 
             if(callbackData.equals("noticeTimeCancelNotifications")) {
                 service.setScheduler(chatId, false);
 //                    //todo remove service.getScheduler(chatId) after all test
-                    getAnswerMessage(chatId, "You Cancel Notifications " + service.getScheduler(chatId));
-                    execute(new StartMenu(chatId).getMessage());
+                getAnswerMessage(chatId, "You Cancel Notifications " + service.getScheduler(chatId));
+                execute(new StartMenu(chatId).getMessage());
             }
 
             List<String> noticeTimeCallbackData = List.of("noticeTime9", "noticeTime10", "noticeTime11",
@@ -139,7 +148,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             case "settings" -> handleSettingsMainMenu(chatId, answerCallbackQuery);
             case "price precision" -> handlePricePrecision(chatId, answerCallbackQuery, service);
             case "bank" -> handleBankSelection(chatId, answerCallbackQuery, service);
-            case "currency" -> answerCallbackQuery.setText("You chose currency");
+            case "currency" -> haldleCurrencySelection(chatId,answerCallbackQuery,service);
             case "time notification" -> handleTimeNoticeMainManu(chatId, service);
 
         }
@@ -170,12 +179,22 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         answerCallbackQuery.setText("You chose bank");
     }
 
+    private void haldleCurrencySelection(Long chatId,AnswerCallbackQuery answerCallbackQuery,BotUserService service) throws TelegramApiException{
+        CurrencyMenu currency = new CurrencyMenu(service.getCurrency(chatId).name(),chatId);
+        execute(currency.getMessage(chatId));
+        answerCallbackQuery.setText("You chose currency");
+    }
+
     private void handleSetBankSelection(Long chatId, BotUserService service, Bank bank) throws TelegramApiException {
         service.setBank(chatId,bank);
         getAnswerMessage(chatId, "You set Bank as " + service.getBank(chatId).name());
         execute(new StartMenu(chatId).getMessage());
     }
-
+    private void handleSetCurrencySelection(Long chatId,BotUserService service,Currency currency) throws  TelegramApiException{
+        service.setCurrencies(chatId,currency);
+        getAnswerMessage(chatId,"You set Currency as " + service.getCurrency(chatId).name());
+        execute(new StartMenu(chatId).getMessage());
+    }
     private void handlePricePrecisionSelection(Long chatId, int precision, BotUserService service) throws TelegramApiException {
         service.setPrecision(chatId, precision);
         getAnswerMessage(chatId, "Number of decimal places: " + service.getPrecision(chatId));
