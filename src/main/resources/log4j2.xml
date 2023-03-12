@@ -1,0 +1,19 @@
+<Configuration status="info">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss}  [%thread] %-5level %logger{36} - %msg%n" />
+        </Console>
+        <File name="LogToFile" fileName="logs/app.log">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss}  [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="LogToFile" />
+        </Root>
+    </Loggers>
+</Configuration>
