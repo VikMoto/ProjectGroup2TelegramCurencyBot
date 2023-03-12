@@ -8,7 +8,7 @@ public class StorageOfUsers {
     private static volatile StorageOfUsers instance;
     private ConcurrentHashMap<Long, BotUser> userSettings;
 
-    public StorageOfUsers(){
+    private StorageOfUsers(){
         userSettings = new ConcurrentHashMap<>();
     }
 
