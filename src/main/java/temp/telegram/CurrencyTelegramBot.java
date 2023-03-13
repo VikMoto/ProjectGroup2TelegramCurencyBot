@@ -147,12 +147,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             switch (callbackData) {
                 case "setCurrencyUSD" -> handleCurrencySET(chatId, Currency.USD);
                 case "setCurrencyEUR" -> handleCurrencySET(chatId, Currency.EUR);
+                case "setCurrencyBACK" -> handleCurrencyBACK(chatId);
             }
         }
-    }
-
-    private void handleCurrencySET(Long chatId, Currency currency) {
-
     }
 
 
@@ -166,6 +163,17 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             case "time notification" -> handleTimeNoticeMainManu(chatId);
 
         }
+    }
+
+    private void handleCurrencySET(Long chatId, Currency currency) throws TelegramApiException {
+        service.setCurrencies(chatId, currency);
+        getAnswerMessage(chatId, "You set Currency as " + service.getCurrency(chatId));
+
+
+    }
+
+    private void handleCurrencyBACK(Long chatId) throws TelegramApiException {
+        execute(new StartMenu(chatId).getMessage());
     }
 
     private void handleTimeNoticeMainManu(Long chatId) throws TelegramApiException {

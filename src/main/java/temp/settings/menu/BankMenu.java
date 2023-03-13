@@ -27,25 +27,19 @@ public class BankMenu {
 
         InlineKeyboardButton btn1 = InlineKeyboardButton
                 .builder()
-
                 .text(this.checkout.equals("MonoBank") ? "✅ MonoBank" : "MonoBank")
-
                 .callbackData("setBankMonoBank")
                 .build();
 
         InlineKeyboardButton btn2 = InlineKeyboardButton
                 .builder()
-
                 .text(this.checkout.equals("NBU") ? "✅ NBU" : "NBU")
-
                 .callbackData("setBankNBU")
                 .build();
 
         InlineKeyboardButton btn3 = InlineKeyboardButton
                 .builder()
-
-                .text(this.checkout.equals("PrivatBank") ? "✅ Privat" : "Privat")
-
+                .text(this.checkout.equals("PrivatBank") ? "✅ PrivatBank" : "PrivatBank")
                 .callbackData("setBankPrivat")
                 .build();
 

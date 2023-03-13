@@ -25,23 +25,26 @@ public class CurrencyMenu {
 
         InlineKeyboardButton usd = InlineKeyboardButton
                 .builder()
-
-                .text(this.checkout.equals("usd") ? "\u0024 USD" : "USD")
-
+                .text(this.checkout.equals("USD") ? "✅ USD" : "USD")
                 .callbackData("setCurrencyUSD")
                 .build();
 
         InlineKeyboardButton eur = InlineKeyboardButton
                 .builder()
-
-                .text(this.checkout.equals("eur") ? "\u8364\u20AC EUR" : "EUR")
-
+                .text(this.checkout.equals("EUR") ? "✅ EUR" : "EUR")
                 .callbackData("setCurrencyEUR")
+                .build();
+
+        InlineKeyboardButton back = InlineKeyboardButton
+                .builder()
+                .text("Back Main Menu")
+                .callbackData("setCurrencyBACK")
                 .build();
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(Arrays.asList(usd));
         keyboard.add(Arrays.asList(eur));
+        keyboard.add(Arrays.asList(back));
 
         final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
                 .builder()
