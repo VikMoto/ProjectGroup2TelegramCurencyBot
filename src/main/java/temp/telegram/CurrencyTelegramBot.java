@@ -202,7 +202,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     }
 
     public void handleGetInformation(Long chatId) throws IOException, TelegramApiException {
-        String answerFromMenu = service.getInfo(chatId);
+        String answerFromMenu = service.getInfo(chatId) + "\n" +
+                service.getUsersWithNotificationOnCurrentHour(20);
         getAnswerMessage(chatId, answerFromMenu);
         execute(new StartMenu(chatId).getMessage());
     }
