@@ -21,7 +21,6 @@ public class StartCommand extends BotCommand {
         super("start"," Start command");
     }
 
-    PrivatBankCurrencyService privatBankCurrencyService = new PrivatBankCurrencyService();
     BotUserService service = BotUserService.getInstance();
 
     @Override
@@ -59,7 +58,7 @@ public class StartCommand extends BotCommand {
         try {
             absSender.execute(sendMessage);
         } catch (Exception e) {
-            // Handle exception
+            e.printStackTrace();
         }
     }
 }
