@@ -38,18 +38,9 @@ public class CurrencyMenu {
                 .callbackData("setCurrencyEUR")
                 .build();
 
-        InlineKeyboardButton gbp = InlineKeyboardButton
-                .builder()
-
-                .text(this.checkout.equals("gbp") ? "? GBP" : "GBP")
-
-                .callbackData("setCurrencyGbp")
-                .build();
-
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(Arrays.asList(usd));
         keyboard.add(Arrays.asList(eur));
-        keyboard.add(Arrays.asList(gbp));
 
         final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
                 .builder()
