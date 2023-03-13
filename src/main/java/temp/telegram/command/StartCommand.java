@@ -25,9 +25,10 @@ public class StartCommand extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
+        String text = "Welcome! Current bot will help you to get information about currency exchange rate";
         service.createUser(chat.getId());
 
-        String text = "Welcome! Current bot will help you to get information about currency exchange rate";
+
         Long chatId = chat.getId();
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(text);
