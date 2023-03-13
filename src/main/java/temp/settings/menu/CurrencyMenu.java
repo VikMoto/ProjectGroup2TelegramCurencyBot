@@ -25,7 +25,7 @@ public class CurrencyMenu {
         InlineKeyboardButton usd = InlineKeyboardButton
                 .builder()
 
-                .text(this.checkout.equals("usd") ? "? USD" : "USD")
+                .text(this.checkout.equals("usd") ? "?  USD" : "USD")
 
                 .callbackData("setCurrencyUSD")
                 .build();
@@ -33,7 +33,7 @@ public class CurrencyMenu {
         InlineKeyboardButton eur = InlineKeyboardButton
                 .builder()
 
-                .text(this.checkout.equals("eur") ? "? EUR" : "EUR")
+                .text(this.checkout.equals("eur") ? "?  EUR" : "EUR")
 
                 .callbackData("setCurrencyEUR")
                 .build();
