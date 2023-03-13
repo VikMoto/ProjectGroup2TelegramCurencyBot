@@ -28,13 +28,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
-
     private static volatile CurrencyTelegramBot instance;
     private CurrencyService currencyService;
     private PrettyPrintCurrencyServise prettyPrintCurrencyServise;
-    private BotUserService service = BotUserService.getInstance();
-
+    private  BotUserService service = BotUserService.getInstance();
     private CurrencyTelegramBot() {
+        currencyService = new PrivatBankCurrencyService();
         prettyPrintCurrencyServise = new PrettyPrintCurrencyServise();
 
         register(new StartCommand());
@@ -46,7 +45,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         if (result != null) {
             return result;
         }
-        synchronized (CurrencyTelegramBot.class) {
+        synchronized (StorageOfUsers.class) {
             if (instance == null) {
                 instance = new CurrencyTelegramBot();
             }
@@ -78,8 +77,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     public void processNonCommandUpdate(Update update) {
         StartCommand startCommand = new StartCommand();
 
-
-
         if (update.hasCallbackQuery()) {
 
             CallbackQuery callbackQuery = update.getCallbackQuery();
@@ -108,17 +105,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     }
 
-    private void handleMainMenu(String callbackData, Long chatId, BotUserService service, AnswerCallbackQuery answerCallbackQuery) throws IOException, TelegramApiException {
-        switch (callbackData) {
-            case "getInformation" -> handleGetInformation(chatId);
-            case "settings" -> handleSettingsMainMenu(chatId, answerCallbackQuery);
-            case "price precision" -> handlePricePrecision(chatId, answerCallbackQuery, service);
-            case "bank" -> handleBankSelection(chatId, answerCallbackQuery, service);
-            case "currency" -> answerCallbackQuery.setText("You chose currency");
-            case "time notification" -> handleTimeNoticeMainManu(chatId, service);
-
-        }
-    }
     private void handleSetBank(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
         if (callbackData.contains("setBank")) {
             switch (callbackData) {
@@ -128,7 +114,26 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             }
         }
     }
+    private void handleNotificationTime(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
+        if (callbackData.contains("noticeTime")){
 
+            if(callbackData.equals("noticeTimeCancelNotifications")) {
+                service.setScheduler(chatId, false);
+//                    //todo remove service.getScheduler(chatId) after all test
+                    getAnswerMessage(chatId, "You Cancel Notifications " + service.getScheduler(chatId));
+                    execute(new StartMenu(chatId).getMessage());
+            }
+
+            List<String> noticeTimeCallbackData = List.of("noticeTime9", "noticeTime10", "noticeTime11",
+                    "noticeTime12", "noticeTime13", "noticeTime14", "noticeTime15", "noticeTime16",
+                    "noticeTime17", "noticeTime18", "noticeTime19", "noticeTime20");
+            int index = noticeTimeCallbackData.indexOf(callbackData);
+            if (index >= 0) {
+                int hour = index + 9;
+                handleSchedulerTimeSelection(chatId, hour, service);
+            }
+        }
+    }
 
     private void handlePricePrecision(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
         if (callbackData.contains("pricePrecision")) {
@@ -141,33 +146,23 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     }
 
 
+    private void handleMainMenu(String callbackData, Long chatId, BotUserService service, AnswerCallbackQuery answerCallbackQuery) throws IOException, TelegramApiException {
+        switch (callbackData) {
+            case "getInformation" -> handleGetInformation(chatId);
+            case "settings" -> handleSettingsMainMenu(chatId, answerCallbackQuery);
+            case "price precision" -> handlePricePrecision(chatId, answerCallbackQuery, service);
+            case "bank" -> handleBankSelection(chatId, answerCallbackQuery, service);
+            case "currency" -> answerCallbackQuery.setText("You chose currency");
+            case "time notification" -> handleTimeNoticeMainManu(chatId, service);
 
+        }
+    }
 
     private void handleTimeNoticeMainManu(Long chatId, BotUserService service) throws TelegramApiException {
         NotificationsTime notificationsTime = new NotificationsTime(String.valueOf(service.getSchedulerTime(chatId)), chatId);
         execute(notificationsTime.getMessage());
     }
 
-    private void handleNotificationTime(BotUserService service, String callbackData, Long chatId) throws TelegramApiException {
-        if (callbackData.contains("noticeTime")){
-
-            if(callbackData.equals("noticeTimeCancelNotifications")) {
-                service.setScheduler(chatId, false);
-//                    //todo remove service.getScheduler(chatId) after all test
-                getAnswerMessage(chatId, "You Cancel Notifications " + service.getScheduler(chatId));
-                execute(new StartMenu(chatId).getMessage());
-            }
-
-            List<String> noticeTimeCallbackData = List.of("noticeTime9", "noticeTime10", "noticeTime11",
-                    "noticeTime12", "noticeTime13", "noticeTime14", "noticeTime15", "noticeTime16",
-                    "noticeTime17", "noticeTime18");
-            int index = noticeTimeCallbackData.indexOf(callbackData);
-            if (index >= 0) {
-                int hour = index + 9;
-                handleSchedulerTimeSelection(chatId, hour, service);
-            }
-        }
-    }
     private void handleSchedulerTimeSelection(Long chatId, int time, BotUserService service) throws TelegramApiException {
         service.setSchedulerTime(chatId, time);
         service.setScheduler(chatId, true);

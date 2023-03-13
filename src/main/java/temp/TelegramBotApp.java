@@ -22,8 +22,7 @@ public class TelegramBotApp {
 
     private static final Logger logger = LogManager.getLogger(TelegramBotApp.class);
     public static void main(String[] args) throws IOException {
-       TelegramBotService botService = new TelegramBotService();
-
+        TelegramBotService botService = new TelegramBotService();
 
         ScheduleService scheduleService = new ScheduleServiceImpl();
         try {
@@ -31,6 +30,7 @@ public class TelegramBotApp {
         } catch (SchedulerException e) {
             throw new RuntimeException(e);
         }
+
         //Privat bank test
         CurrencyService currencyService = new PrivatBankCurrencyService();
         Currency currency = Currency.USD;
