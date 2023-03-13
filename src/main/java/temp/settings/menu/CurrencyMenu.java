@@ -26,7 +26,7 @@ public class CurrencyMenu {
         InlineKeyboardButton usd = InlineKeyboardButton
                 .builder()
 
-                .text(this.checkout.equals("usd") ? " USD" : "USD")
+                .text(this.checkout.equals("usd") ? "\u0024 USD" : "USD")
 
                 .callbackData("setCurrencyUSD")
                 .build();
