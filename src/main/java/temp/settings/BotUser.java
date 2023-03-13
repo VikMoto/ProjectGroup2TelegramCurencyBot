@@ -6,18 +6,16 @@ import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class BotUser {
     private final long id;
     private Bank bank;
-    @Getter
     private Currency currency;
     private int precision;
     private boolean scheduler;
     private int schedulerTime;
-
-    //TODO currency field is missing, need to be ENUM or CONSTANT
 
 
     public int getSchedulerTime() {

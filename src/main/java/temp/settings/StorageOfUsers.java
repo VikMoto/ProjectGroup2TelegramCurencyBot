@@ -35,6 +35,7 @@ public class StorageOfUsers {
         List<Long> userIds = new ArrayList<>();
         for (BotUser botUser : userSettings.values()){
             if (botUser.isScheduler() && botUser.getSchedulerTime() == time){
+
                 userIds.add(botUser.getId());
             }
         }
