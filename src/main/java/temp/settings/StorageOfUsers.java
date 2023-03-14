@@ -8,16 +8,16 @@ public class StorageOfUsers {
     private static volatile StorageOfUsers instance;
     private ConcurrentHashMap<Long, BotUser> userSettings;
 
-    private StorageOfUsers(){
+    private StorageOfUsers() {
         userSettings = new ConcurrentHashMap<>();
     }
 
-    public static StorageOfUsers getInstance() { //«блокировка с двойной проверкой» (Double-Checked Locking)
+    public static StorageOfUsers getInstance() {
         StorageOfUsers result = instance;
         if (result != null) {
             return result;
         }
-        synchronized(StorageOfUsers.class) {
+        synchronized (StorageOfUsers.class) {
             if (instance == null) {
                 instance = new StorageOfUsers();
             }
@@ -25,17 +25,18 @@ public class StorageOfUsers {
         }
     }
 
-    public void add(BotUser botUser){
+    public void add(BotUser botUser) {
         userSettings.put(botUser.getId(), botUser);
     }
 
-    public BotUser get(long userId) { return userSettings.get(userId); }
+    public BotUser get(long userId) {
+        return userSettings.get(userId);
+    }
 
-    public List<Long> getUsersWithNotficationOnCurrentHour(int time){
+    public List<Long> getUsersWithNotficationOnCurrentHour(int time) {
         List<Long> userIds = new ArrayList<>();
-        for (BotUser botUser : userSettings.values()){
-            if (botUser.isScheduler() && botUser.getSchedulerTime() == time){
-
+        for (BotUser botUser : userSettings.values()) {
+            if (botUser.isScheduler() && botUser.getSchedulerTime() == time) {
                 userIds.add(botUser.getId());
             }
         }

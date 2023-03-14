@@ -43,7 +43,3 @@ tasks.withType(JavaCompile) {
 test {
     useJUnitPlatform()
 }
-java {
-    sourceCompatibility = 17
-    targetCompatibility = 17
-}
