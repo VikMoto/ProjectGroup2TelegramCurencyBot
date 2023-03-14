@@ -1,4 +1,4 @@
-#Telegram Currency Bot
+# Telegram Currency Bot
 
 ## Overview
 
