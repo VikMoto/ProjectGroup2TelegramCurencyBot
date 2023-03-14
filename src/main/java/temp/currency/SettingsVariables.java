@@ -19,12 +19,4 @@ public class SettingsVariables {
 
     private SettingsVariables() {
     }
-
-    public static synchronized SettingsVariables getInstance() {
-        if (instance == null) {
-            instance = new SettingsVariables();
-        }
-        return instance;
-    }
-
 }

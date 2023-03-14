@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 @AllArgsConstructor
 public class StartMenu {
@@ -15,11 +15,8 @@ public class StartMenu {
     Long chatId;
 
     public SendMessage getMessage() {
-
         String helloText = "Please make Your Choice";
-
         System.out.println("chatId = " + chatId);
-
         SendMessage message = new SendMessage();
         message.setText(helloText);
         message.setChatId(chatId);
@@ -34,11 +31,9 @@ public class StartMenu {
                 .callbackData("settings")
                 .build();
 
-
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(Arrays.asList(button1));
         keyboard.add(Arrays.asList(button2));
-
 
         final InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup
                 .builder()
@@ -46,9 +41,7 @@ public class StartMenu {
                 .build();
 
         message.setReplyMarkup(keyboardMarkup);
-//        message.setReplyToMessageId(messageId);
 
         return message;
     }
-
 }

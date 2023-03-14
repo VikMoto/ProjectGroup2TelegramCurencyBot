@@ -11,7 +11,6 @@ import temp.telegram.CurrencyTelegramBot;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.Calendar;
 import java.util.List;
 
 public class SendRegularMessagesJob implements Job {
@@ -28,7 +27,6 @@ public class SendRegularMessagesJob implements Job {
 
             List<Long> usersWithNotficationOnCurrentHour = storageOfUsers.getUsersWithNotficationOnCurrentHour(getCurrentHour());
             System.out.println("usersWithNotficationOnCurrentHour = " + usersWithNotficationOnCurrentHour);
-
 
             logger.info("Finish SendRegularMessagesJob");
         }

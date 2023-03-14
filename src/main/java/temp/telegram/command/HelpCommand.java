@@ -15,10 +15,9 @@ public class HelpCommand extends BotCommand {
     @SneakyThrows
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-        SendMessage helpMessage =new SendMessage();
-        helpMessage.setText("I`am help you to know Exchange Rate Ukrainian Hryvnia UAH");
+        SendMessage helpMessage = new SendMessage();
+        helpMessage.setText("Hi! I can help you to quickly get currency Exchange Rate from most popular ukrainian banks");
         helpMessage.setChatId(Long.toString(chat.getId()));
         absSender.execute(helpMessage);
     }
-
 }
