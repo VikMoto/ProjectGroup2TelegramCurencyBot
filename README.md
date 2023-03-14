@@ -13,35 +13,35 @@ There is a list of static commands:
 
 - **`/help`** - shows the information about the bot.
 
-  ![help_1](resources/help_1.png)
+  ![help_1](src/main/resources/help_1.png)
 
 - **`/start`** - shows the Main Menu with buttons "Get Information" and "Settings" as commands.
 
-  ![bot_1](resources/bot_1.png)
+  ![bot_1](src/main/resources/bot_1.png)
 
 - **`Get information`** - shows the actual currency exchange rate according to the user settings.
 
-  ![bot_2](resources/bot_2.png)
+  ![bot_2](src/main/resources/bot_2.png)
 
 - **`Settings`** - shows the user settings menu.
 
-  ![bot_3](resources/bot_3.png)
+  ![bot_3](src/main/resources/bot_3.png)
 
 - **`Price pression`** - shows the menu with rounding precision options. Allowed options are: 2, 3, 4. Marked with green check marks applied for showing rates.
 
-  ![bot_4](resources/bot_4.png)
+  ![bot_4](src/main/resources/bot_4.png)
 
 - **`Bank`** - shows the menu with supported ukrainian banks. Marked with green check marks applied for showing.
 
-  ![bot_5](resources/bot_5.png)
+  ![bot_5](src/main/resources/bot_5.png)
 
 - **`Currencies`** - shows the menu with supported currencies. Multiselect is supported for currencies. Marked with green check marks applied for showing.
 
-  ![bot_6](resources/bot_6.png)
+  ![bot_6](src/main/resources/bot_6.png)
 
 - **`Time notification`** - shows the menu with working hours which can be selected and notification message will be send by schedule with currency exchange rates according to the user settings.
 
-  ![bot_7](resources/bot_7.png)
+  ![bot_7](src/main/resources/bot_7.png)
 
 ## License
 
