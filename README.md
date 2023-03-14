@@ -1,4 +1,5 @@
-#Telegram Currency Bot
+# Telegram Currency Bot
+
 ## Overview
 
 The Telegram bot for currency rates monitoring. It shows the currencies(USD/EUR) exchange rate from the most populat ukrainian banks(NBU/MonoBank/PrivatBank) with **the ability to set real-time** notification by schedule.
