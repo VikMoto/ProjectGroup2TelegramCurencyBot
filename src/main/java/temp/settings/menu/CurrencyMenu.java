@@ -1,6 +1,5 @@
 package temp.settings.menu;
 
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -10,11 +9,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 @Slf4j
 @AllArgsConstructor
 public class CurrencyMenu {
-    String checkout;
+    List<temp.currency.dto.Currency> checkout;
     Long chatId;
+
     public SendMessage getMessage() {
 
         String helloText = "Please choose the Currencies";
@@ -25,19 +26,22 @@ public class CurrencyMenu {
 
         InlineKeyboardButton usd = InlineKeyboardButton
                 .builder()
-                .text(this.checkout.equals("USD") ? "✅ USD" : "USD")
+                .text(this.checkout.stream()
+                        .anyMatch(c -> c.name().equals("USD"))
+                        ? "✅ USD" : "USD")
                 .callbackData("setCurrencyUSD")
                 .build();
 
         InlineKeyboardButton eur = InlineKeyboardButton
                 .builder()
-                .text(this.checkout.equals("EUR") ? "✅ EUR" : "EUR")
+                .text(this.checkout.stream()
+                        .anyMatch(c -> c.name().equals("EUR")) ? "✅ EUR" : "EUR")
                 .callbackData("setCurrencyEUR")
                 .build();
 
         InlineKeyboardButton back = InlineKeyboardButton
                 .builder()
-                .text("Back Main Menu")
+                .text("Back To Main Menu")
                 .callbackData("setCurrencyBACK")
                 .build();
 
@@ -52,8 +56,6 @@ public class CurrencyMenu {
                 .build();
 
         message.setReplyMarkup(keyboardMarkup);
-
         return message;
-
     }
 }
