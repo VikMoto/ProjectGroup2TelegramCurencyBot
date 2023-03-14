@@ -28,7 +28,6 @@ public class BotUser {
         this.id = id;
         bank = Bank.NBU;
         currencies.add(Currency.USD);
-        currencies.add(Currency.EUR);
         precision = 2;
         scheduler = true;
         schedulerTime = 9;
