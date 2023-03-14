@@ -84,11 +84,6 @@ public class NotificationsTime {
                 .text(this.checkout.equals("19") ? "\uD83D\uDD55 19:00" : "19:00")
                 .callbackData("noticeTime19")
                 .build();
-        InlineKeyboardButton twenty = InlineKeyboardButton
-                .builder()
-                .text(this.checkout.equals("20") ? "\uD83D\uDD55 20:00" : "20:00")
-                .callbackData("noticeTime20")
-                .build();
 
 
         InlineKeyboardButton cancelNotifications = InlineKeyboardButton
@@ -112,7 +107,6 @@ public class NotificationsTime {
         List<InlineKeyboardButton> keyboardButtonsRow4 = new ArrayList<>();
         keyboardButtonsRow4.add(eighteen);
         keyboardButtonsRow4.add(nineteen);
-        keyboardButtonsRow4.add(twenty);
         keyboardButtonsRow4.add(cancelNotifications);
 
 

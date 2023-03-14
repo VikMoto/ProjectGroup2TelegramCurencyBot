@@ -27,7 +27,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private CurrencyService currencyService;
     private PrettyPrintCurrencyServise prettyPrintCurrencyServise;
     private BotUserService service = BotUserService.getInstance();
-
+    private  AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
     private CurrencyTelegramBot() {
         currencyService = new PrivatBankCurrencyService();
         prettyPrintCurrencyServise = new PrettyPrintCurrencyServise();
@@ -83,7 +83,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             String callbackData = query.getData();
             Long chatId = query.getMessage().getChatId();
 
-            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+
 
             answerCallbackQuery.setCallbackQueryId(query.getId());
 
@@ -177,6 +177,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         switch (callbackData) {
             case "getInformation":
                 handleGetInformation(chatId);
+                break;
             case "settings":
                 handleSettingsMainMenu(chatId, answerCallbackQuery);
                 break;
@@ -195,9 +196,18 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         }
     }
 
+    private void handleCurrencySelection(Long chatId, AnswerCallbackQuery answerCallbackQuery) throws TelegramApiException {
+        List<Currency> currencies = service.getCurrencies(chatId);
+        System.out.println("currencies = " + currencies);
+        CurrencyMenu curr = new CurrencyMenu(currencies, chatId);
+        execute(curr.getMessage());
+        answerCallbackQuery.setText("You chose currency");
+    }
+
     private void handleCurrencySET(Long chatId, Currency currency) throws TelegramApiException {
         service.setCurrencies(chatId, currency);
         getAnswerMessage(chatId, "You set Currency as " + service.getCurrencies(chatId).toString());
+        handleCurrencySelection(chatId, answerCallbackQuery);
     }
 
     private void handleCurrencyBACK(Long chatId) throws TelegramApiException {
@@ -247,17 +257,10 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         answerCallbackQuery.setText("You selected price precision");
     }
 
-    private void handleCurrencySelection(Long chatId, AnswerCallbackQuery answerCallbackQuery) throws TelegramApiException {
-        List<Currency> currencies = service.getCurrencies(chatId);
-        CurrencyMenu curr = new CurrencyMenu(currencies, chatId);
-        execute(curr.getMessage());
-        answerCallbackQuery.setText("You chose currency");
-    }
-
     public void handleGetInformation(Long chatId) throws IOException, TelegramApiException {
-        String answerFromMenu = service.getInfo(chatId) + "\n" +
-                service.getUsersWithNotificationOnCurrentHour(20);
+        String answerFromMenu = service.getInfo(chatId);
         getAnswerMessage(chatId, answerFromMenu);
+
         execute(new StartMenu(chatId).getMessage());
     }
 
