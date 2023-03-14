@@ -1,7 +1,6 @@
 package temp.settings;
 
 import lombok.Data;
-import lombok.Getter;
 import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
 
@@ -12,11 +11,10 @@ import java.util.List;
 public class BotUser {
     private final long id;
     private Bank bank;
-    private Currency currency;
+    private List<Currency> currencies = new ArrayList<>();
     private int precision;
     private boolean scheduler;
     private int schedulerTime;
-
 
     public int getSchedulerTime() {
         return schedulerTime;
@@ -29,11 +27,9 @@ public class BotUser {
     public BotUser(long id) {
         this.id = id;
         bank = Bank.NBU;
-        currency = Currency.USD;
+        currencies.add(Currency.USD);
         precision = 2;
         scheduler = true;
         schedulerTime = 9;
-
     }
-
 }
