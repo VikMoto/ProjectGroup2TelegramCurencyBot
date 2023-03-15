@@ -7,9 +7,9 @@ import temp.Api.PrivatBankCurrencyService;
 import temp.currency.dto.Bank;
 import temp.currency.dto.Currency;
 import temp.ui.PrettyPrintCurrencyServise;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BotUserService {
@@ -52,16 +52,16 @@ public class BotUserService {
     public void setCurrencies(long userId, Currency currency) {
         List<Currency> currencies = getCurrencies(userId);
         List<Currency> currenciesCopy = new ArrayList<>(currencies);
-        if(currencies.contains(currency)){
+        if (currencies.contains(currency)) {
             currenciesCopy.remove(currency);
-        }else{
+        } else {
             currenciesCopy.add(currency);
         }
         userStorage.get(userId).setCurrencies(currenciesCopy);
     }
 
     public List<Currency> getCurrencies(long userId) {
-       return userStorage.get(userId).getCurrencies();
+        return userStorage.get(userId).getCurrencies();
     }
 
     public int getPrecision(long userId) {
@@ -99,32 +99,23 @@ public class BotUserService {
         if (bank == Bank.NBU) {
             CurrencyService currencyService = new NBUCurrencyService();
             for (Currency currency : currencies) {
-                result = result + bank.name() + "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency),currency, getPrecision(userId)) + "\n";
+                result = result + bank.name() + "\n" + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency), currency, getPrecision(userId)) + "\n";
             }
         }
 
         if (bank == Bank.MonoBank) {
             CurrencyService currencyService = new MonoCurrencyService();
             for (Currency currency : currencies) {
-                result = result +  bank.name() + "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency),currency, getPrecision(userId)) + "\n";
+                result = result + bank.name() + "\n" + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency), currency, getPrecision(userId)) + "\n";
             }
         }
 
         if (bank == Bank.PrivatBank) {
             CurrencyService currencyService = new PrivatBankCurrencyService();
             for (Currency currency : currencies) {
-                result = result +  bank.name() + "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency),currency, getPrecision(userId)) + "\n";
+                result = result + bank.name() + "\n" + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency), currency, getPrecision(userId)) + "\n";
             }
         }
         return result;
     }
-
-    private String getCurrenciesForPrintMessage(long userId, Bank bank, List<Currency> currencies, String result, CurrencyService currencyService) throws IOException {
-        for (Currency currency : currencies) {
-            result = result + bank.name() + "\n"  + new PrettyPrintCurrencyServise().convert(currencyService.getRate(currency),currency, getPrecision(userId)) + "\n";
-        }
-        return result;
-    }
-
-
 }

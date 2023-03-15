@@ -27,7 +27,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private CurrencyService currencyService;
     private PrettyPrintCurrencyServise prettyPrintCurrencyServise;
     private BotUserService service = BotUserService.getInstance();
-    private  AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+    private AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+
     private CurrencyTelegramBot() {
         currencyService = new PrivatBankCurrencyService();
         prettyPrintCurrencyServise = new PrettyPrintCurrencyServise();
@@ -36,7 +37,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         register(new HelpCommand());
     }
 
-    public static CurrencyTelegramBot getInstance() { //«блокировка с двойной проверкой» (Double-Checked Locking)
+    public static CurrencyTelegramBot getInstance() {
         CurrencyTelegramBot result = instance;
         if (result != null) {
             return result;
@@ -75,7 +76,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         StartCommand startCommand = new StartCommand();
 
         if (update.hasCallbackQuery()) {
-
             CallbackQuery callbackQuery = update.getCallbackQuery();
             System.out.println("callbackQuery = " + callbackQuery.getData());
 
@@ -83,10 +83,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             String callbackData = query.getData();
             Long chatId = query.getMessage().getChatId();
 
-
-
             answerCallbackQuery.setCallbackQueryId(query.getId());
-
 
             handleMainMenu(callbackData, chatId, answerCallbackQuery);
 
@@ -98,9 +95,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             handleCurrencySet(callbackData, chatId);
 
             execute(answerCallbackQuery);
-
         }
-
     }
 
     private void handleSetBank(String callbackData, Long chatId) throws TelegramApiException {

@@ -20,7 +20,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final String CRONTRIGGERGROUP = "crontriggergroup1";
     private final String CRON_SCHEDULE = "0 0 8,9,10,11,12,13,14,15,16,17,18,19 ? * * *";
 
-
     private static final Logger logger = LogManager.getLogger(ScheduleServiceImpl.class);
 
     @Override
@@ -30,7 +29,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .build();
 
         CronTrigger cronTrigger = TriggerBuilder.newTrigger()
-                .withIdentity(CRONTRIGGER , CRONTRIGGERGROUP)
+                .withIdentity(CRONTRIGGER, CRONTRIGGERGROUP)
                 .withSchedule(CronScheduleBuilder.cronSchedule(CRON_SCHEDULE))
                 .build();
 
